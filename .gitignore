@@ -1,4 +1,4 @@
-# === OS / editor мусор при работе в репе ===
+# === OS / editor junk that may appear inside the repo ===
 .DS_Store
 Thumbs.db
 *.swp
@@ -7,18 +7,17 @@ Thumbs.db
 .idea/
 .vscode/
 
-# === Кэш локальных инструментов ===
+# === Local tool caches ===
 .pre-commit-cache/
 
-# === Machine-specific overrides ===
-# Файлы *.local в stow-пакетах — не коммитим.
-# Шаблоны *.local.example — коммитим.
-*.local
-!*.local.example
+# === Machine-specific override files ===
+# Committed templates: foo.local.example
+# Uncommitted machine overrides land in ~ directly (not in stow).
+# NB: do NOT add '*.local' here — it would also ignore load-bearing dirs
+# like stow/shell/.zshrc.local/ whose name ends in '.local'.
 
-# === Страховка на случай случайного `cp` секрет-файла в stow-пакет ===
-# (секрет-файлы живут в $HOME и в репу попасть не должны; это double-защита
-# на случай невнимательности)
+# === Safety net: if a secret file is ever accidentally cp'd into a stow package ===
+# (Secrets live in $HOME only; this is double-protection against carelessness.)
 .zshrc.secret
 .gitconfig.local
 *.key
