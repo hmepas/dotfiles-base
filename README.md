@@ -48,6 +48,7 @@ stow -t ~ -d stow term-gui
 ### Any Mac
 
 ```bash
+defaults write -g NSWindowShouldDragOnGesture -bool true # to move windows with ctrl-cmd
 stow -t ~ -d stow macos-common
 ```
 
