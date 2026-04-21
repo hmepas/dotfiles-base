@@ -1,0 +1,37 @@
+title = "dotfiles-base gitleaks config"
+
+# basic stuff, aws, google cloud, etc
+[extend]
+useDefault = true
+
+# Personal
+
+[[rules]]
+id = "anthropic-zai-glm-token"
+description = "Anthropic/Z.AI GLM proxy token (hex32.alnum16)"
+regex = '''[a-f0-9]{32}\.[A-Za-z0-9]{16}'''
+tags = ["anthropic", "glm-proxy"]
+
+[[rules]]
+id = "openai-sk-token"
+description = "OpenAI sk- token"
+regex = '''\bsk-[A-Za-z0-9]{20,}\b'''
+tags = ["openai"]
+
+[[rules]]
+id = "huggingface-hf-token"
+description = "HuggingFace hf_ token"
+regex = '''\bhf_[A-Za-z0-9]{30,}\b'''
+tags = ["huggingface"]
+
+[[rules]]
+id = "gitlab-pat"
+description = "GitLab PAT (glpat-)"
+regex = '''\bglpat-[A-Za-z0-9\-_]{20}\b'''
+tags = ["gitlab"]
+
+[[rules]]
+id = "gcp-service-account"
+description = "GCP service account JSON (private_key field)"
+regex = '''"type"\s*:\s*"service_account"[\s\S]{0,200}"private_key"'''
+tags = ["gcp"]

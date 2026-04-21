@@ -1,0 +1,83 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse
+import os
+import sys
+from pathlib import Path
+
+
+def is_binary(path: Path) -> bool:
+    try:
+        with path.open("rb") as fh:
+            chunk = fh.read(1024)
+    except OSError:
+        return True
+    return b"\0" in chunk
+
+
+def read_text(path: Path) -> str | None:
+    try:
+        return path.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return None
+
+
+def iter_files(dir_path: Path):
+    for root, dirnames, filenames in os.walk(dir_path):
+        dirnames.sort()
+        filenames.sort()
+        for filename in filenames:
+            yield Path(root) / filename
+
+
+def rel_path(path: Path, base: Path) -> str:
+    try:
+        return str(path.relative_to(base))
+    except ValueError:
+        return os.path.relpath(path, base)
+
+
+def iter_selected(paths: list[Path]):
+    for path in paths:
+        if not path.exists():
+            print(f"# Skipping missing path: {path}", file=sys.stderr)
+            continue
+        if path.is_dir():
+            yield from iter_files(path)
+        elif path.is_file():
+            yield path
+        else:
+            print(f"# Skipping unsupported path: {path}", file=sys.stderr)
+
+
+def collect(paths: list[Path]) -> int:
+    cwd = Path.cwd()
+    for file_path in iter_selected(paths):
+        if is_binary(file_path):
+            continue
+        text = read_text(file_path)
+        if text is None:
+            continue
+        print(f"===== {rel_path(file_path, cwd)} =====")
+        print(text.rstrip("\n"))
+        print()
+    return 0
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Concatenate text files from files or directories with relative headers."
+    )
+    parser.add_argument("paths", nargs="+", help="Files or directories to scan.")
+    return parser.parse_args()
+
+
+def main() -> int:
+    args = parse_args()
+    targets = [Path(d).resolve() for d in args.paths]
+    return collect(targets)
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -1,0 +1,2 @@
+#!/bin/bash
+pwgen -1cnyB 12 7

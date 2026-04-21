@@ -1,0 +1,3 @@
+#!/bin/zsh
+
+tail -f $@ | bat --paging=never -l log

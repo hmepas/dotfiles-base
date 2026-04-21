@@ -1,0 +1,28 @@
+# === OS / editor мусор при работе в репе ===
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+
+# === Кэш локальных инструментов ===
+.pre-commit-cache/
+
+# === Machine-specific overrides ===
+# Файлы *.local в stow-пакетах — не коммитим.
+# Шаблоны *.local.example — коммитим.
+*.local
+!*.local.example
+
+# === Страховка на случай случайного `cp` секрет-файла в stow-пакет ===
+# (секрет-файлы живут в $HOME и в репу попасть не должны; это double-защита
+# на случай невнимательности)
+.zshrc.secret
+.gitconfig.local
+*.key
+*.pem
+*_token
+*-token
+*.secret

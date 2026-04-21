@@ -1,0 +1,87 @@
+# Base Brewfile — installed on any Mac (personal and work).
+# Personal / work extensions — see Brewfile.personal / Brewfile.work.
+#
+# Usage:
+#   brew bundle --file=packages/Brewfile
+
+# ===== Mandatory for this repo =====
+brew "stow"
+brew "gitleaks"
+brew "pre-commit"
+
+# ===== Shell / prompt / tmux =====
+brew "starship"
+brew "tmux"
+brew "zoxide"
+brew "carapace"
+
+# ===== Editor =====
+brew "neovim"
+
+# ===== Navigation / search / preview =====
+brew "fzf"
+brew "fd"
+brew "the_silver_searcher"
+brew "ast-grep"
+brew "eza"
+brew "bat"
+brew "gdu"
+
+# ===== Git / diff =====
+brew "gh"
+brew "git-filter-repo"
+brew "difftastic"
+
+# ===== Base dev tools =====
+brew "cmake"
+brew "go"
+brew "tree-sitter"
+brew "tree-sitter-cli"
+brew "jpeg"
+brew "libmagic"
+brew "zlib"
+
+# ===== Python stack =====
+brew "python@3.12"
+brew "pipx"
+brew "ruff"
+brew "uv"
+brew "python-yq"
+
+# ===== JS / Node =====
+brew "pnpm"
+brew "oven-sh/bun/bun"
+
+# ===== Database CLI =====
+brew "pgcli"
+brew "postgresql@17"
+
+# ===== Container / dev =====
+brew "colima"
+brew "docker"
+brew "docker-compose"
+brew "docker-credential-helper"
+brew "dive"
+
+# ===== Other utilities =====
+brew "cloc"
+brew "fastfetch"
+brew "markdownlint-cli"
+brew "p7zip"
+brew "parallel"
+brew "pwgen"
+brew "rename"
+brew "telnet"
+brew "terminal-notifier"
+brew "tlrc"
+brew "websocat"
+brew "wget"
+
+# ===== GUI (casks) =====
+cask "android-platform-tools"
+cask "ghostty"
+cask "wezterm"
+
+# ===== Fonts =====
+cask "font-hack-nerd-font"
+cask "font-iosevka-nerd-font"

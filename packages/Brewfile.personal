@@ -1,0 +1,48 @@
+# Brewfile.personal — an extension over Brewfile for a personal Mac.
+#
+# Usage (personal machine only):
+#   brew bundle --file=packages/Brewfile.personal
+#
+
+# ===== Taps =====
+tap "acsandmann/tap"
+tap "anomalyco/tap"
+tap "daipeihust/tap"
+tap "hmepas/throt"
+#tap "minio/stable"
+tap "oven-sh/bun"
+
+# ===== Custom / specific tools =====
+brew "hmepas/throt/throt"
+brew "daipeihust/tap/im-select"
+brew "anomalyco/tap/opencode"
+#brew "minio/stable/mc"
+
+# ===== Network / tunnels =====
+brew "frpc"
+brew "dnsmasq"
+
+# ===== AI / agents =====
+#cask "block-goose"
+cask "codex"
+brew "gemini-cli"
+brew "hf"
+
+# ===== AI / agents CLI =====
+#cask "visual-studio-code"
+
+# ===== Media / productivity =====
+brew "ffmpeg"
+brew "mkvtoolnix"
+brew "sox"
+cask "alt-tab"
+cask "android-file-transfer"
+#cask "jordanbaird-ice"
+cask "helium-browser"
+cask "kawa"
+cask "keyclu"
+cask "losslesscut"
+cask "neovide-app"
+cask "obs"
+cask "rar"
+cask "unnaturalscrollwheels"

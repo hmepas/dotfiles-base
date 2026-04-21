@@ -1,0 +1,5 @@
+# Brewfile.work — an extension for a work Mac.
+#
+# Examples that will likely be needed (uncomment as installed):
+#
+# brew "kubectl"

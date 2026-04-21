@@ -1,0 +1,42 @@
+[user]
+	email = hmepas@gmail.com
+	name = Pavel Khmelinsky
+[alias]
+    l = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short
+    la = "!git l --graph --oneline --decorate --all"
+    s = status -s
+    # list branches sorted by last modified
+    b = "!git for-each-ref --sort='-authordate' --format='%(authordate)%09%(objectname:short)%09%(refname)' refs/heads | sed -e 's-refs/heads/--'"
+
+    # list aliases
+    #la = "!git config -l | grep alias | cut -c 7-"
+
+    # find file path in repo
+    f = "!git ls-files | grep -i"
+
+    # saerch for string
+    gr = grep -Ii
+
+    # difftastic
+    # `git log` with patches shown with difftastic.
+    dl = -c diff.external=difft log -p --ext-diff
+
+    # Show the most recent commit with difftastic.
+    ds = -c diff.external=difft show --ext-diff
+
+    # `git diff` with difftastic.
+    dft = -c diff.external=difft diff
+
+[push]
+    default = simple
+    autoSetupRemote = true
+
+[core]
+    excludesfile = ~/.config/git/ignore
+
+[filter "lfs"]
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
+

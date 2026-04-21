@@ -1,0 +1,12 @@
+# AUR packages (via paru).
+#
+# Usage:
+#   paru -S --needed - < packages/arch/pkglist.aur.txt
+#
+# TODO: populate during the first deployment on Arch.
+# Candidates:
+
+# ttf-hack-nerd
+# ttf-iosevka-nerd
+# gemini-cli-bin
+# huggingface-cli

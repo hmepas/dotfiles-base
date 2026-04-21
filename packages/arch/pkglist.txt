@@ -1,0 +1,68 @@
+# Arch / pacman packages — dotfiles-base core.
+#
+# Usage:
+#   sudo pacman -S --needed - < packages/arch/pkglist.txt
+#
+# TODO: populate during the first deployment on Arch.
+# Draft (checking against brew leaves on Mac):
+
+# base-devel
+# git
+# stow
+# gitleaks
+# pre-commit
+#
+# zsh
+# bash
+# bash-completion
+# tmux
+# starship
+# zoxide
+# carapace-bin
+#
+# fzf
+# fd
+# the_silver_searcher
+# ripgrep
+# ast-grep
+# eza
+# bat
+# gdu
+#
+# github-cli
+# git-filter-repo
+# difftastic
+#
+# cmake
+# go
+# tree-sitter
+# tree-sitter-cli
+#
+# python
+# python-pipx
+# python-pipenv
+# ruff
+# uv
+#
+# pnpm
+#
+# pgcli
+# postgresql
+#
+# ffmpeg
+# sox
+# mkvtoolnix-cli
+#
+# cloc
+# fastfetch
+# markdownlint-cli
+# p7zip
+# parallel
+# pwgen
+# renameutils
+# inetutils
+# terminal-notifier-linux  # optional, alternative notify
+# tldr
+# websocat
+# wget
+# dnsmasq
