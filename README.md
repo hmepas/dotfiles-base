@@ -22,8 +22,8 @@ Neovim has its own repo as well.
 brew install stow gitleaks git
 
 # 2. Clone
-git clone git@github.com:hmepas/dotfiles-base.git ~/projects/dotfiles-base
-cd ~/projects/dotfiles-base
+git clone https://github.com/hmepas/dotfiles-base.git
+cd dotfiles-base
 
 # 3. Packages
 brew bundle --file=packages/Brewfile
@@ -80,7 +80,7 @@ See `SECRETS.md` (to be created as part of BW.md PRD). In the first iteration â€
 ## Update
 
 ```bash
-cd ~/projects/dotfiles-base
+cd dotfiles-base
 git pull
 # stow links are already in place, changes are visible immediately
 ```
