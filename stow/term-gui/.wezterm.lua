@@ -6,7 +6,8 @@ return {
     -- color_scheme = 'Solarized Dark - Patched',
 	enable_tab_bar = false,
 	font_size = 13.0,
-	font = wezterm.font('JetBrainsMono Nerd Font Mono'),
+	font = wezterm.font('Hack Nerd Font Mono'),
+
 	-- macos_window_background_blur = 40,
 	macos_window_background_blur = 30,
 	
