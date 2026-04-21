@@ -29,7 +29,7 @@ cd dotfiles-base
 brew bundle --file=packages/Brewfile
 
 # 4. Base symlinking
-stow -t ~ -d stow shell term git bin
+stow -t ~ -d stow shell term git bin-common
 
 # 5. TPM for tmux plugins
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
