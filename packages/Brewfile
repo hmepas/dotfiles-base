@@ -81,6 +81,7 @@ brew "wget"
 cask "android-platform-tools"
 cask "ghostty"
 cask "wezterm"
+cask "hammerspoon"
 cask "karabiner-elements"
 
 # ===== Fonts =====
