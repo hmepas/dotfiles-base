@@ -3,3 +3,5 @@
 # Examples that will likely be needed (uncomment as installed):
 #
 # brew "kubectl"
+#
+cask amethyst
