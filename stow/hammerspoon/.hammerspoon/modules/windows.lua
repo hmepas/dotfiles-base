@@ -1,0 +1,152 @@
+-- Window management.
+--
+-- yabai mac: full set (focus/warp/swap/resize/sticky/float).
+-- non-yabai mac: focus via hs.window, display move, native fullscreen.
+-- Tiling/swap/resize on non-yabai → Amethyst (see AMETHYST.md).
+
+local cfg   = require("config")
+local kbd   = require("modules.keybind")
+local yab   = require("modules.yabai")
+
+local alt        = kbd.alt
+local alt_shift  = kbd.alt_shift
+local hyper      = kbd.hyper
+local cmd_alt_ctrl = kbd.cmd_alt_ctrl
+
+if cfg.IS_YABAI then
+  -- ============================================================
+  -- yabai mode
+  -- ============================================================
+
+  -- Float / sticky / split
+  kbd.bind(hyper, "f", function() yab.cmd({ "window", "--toggle", "float" }) end)
+  kbd.bind(hyper, "s", function() yab.cmd({ "window", "--toggle", "sticky" }) end)
+  kbd.bind(cmd_alt_ctrl, "s", function() yab.cmd({ "window", "--toggle", "split" }) end)
+
+  -- Center unmanaged window
+  kbd.bind(hyper, "space", function() yab.helper("center_unmanaged_window.sh") end)
+
+  -- Focus by direction. Fallback to display, then to recent window.
+  kbd.bind(alt, "h", function() yab.cmd({ "window", "--focus", "west" }) end)
+  kbd.bind(alt, "l", function() yab.cmd({ "window", "--focus", "east" }) end)
+  kbd.bind(alt, "k", function()
+    yab.tryCmd(
+      { "window", "--focus", "north" },
+      { "display", "--focus", "north" },
+      { "window", "--focus", "recent" }
+    )
+  end)
+  kbd.bind(alt, "j", function()
+    yab.tryCmd(
+      { "window", "--focus", "south" },
+      { "display", "--focus", "south" },
+      { "window", "--focus", "recent" }
+    )
+  end)
+
+  -- Stack navigation / cycle
+  kbd.bind(alt, "n", function() yab.cmd({ "window", "--focus", "stack.next" }) end)
+  kbd.bind(alt, "p", function() yab.cmd({ "window", "--focus", "stack.prev" }) end)
+  kbd.bind(alt_shift, "n", function() yab.helper("cycle-space-windows.sh", "next") end)
+  kbd.bind(alt_shift, "p", function() yab.helper("cycle-space-windows.sh", "prev") end)
+
+  -- Warp (move into split)
+  kbd.bind(alt_shift, "h", function() yab.cmd({ "window", "--warp", "west" }) end)
+  kbd.bind(alt_shift, "l", function() yab.cmd({ "window", "--warp", "east" }) end)
+  kbd.bind(alt_shift, "k", function() yab.cmd({ "window", "--warp", "north" }) end)
+  kbd.bind(alt_shift, "j", function() yab.cmd({ "window", "--warp", "south" }) end)
+
+  -- Swap (or move floating)
+  kbd.bind(hyper, "h", function()
+    yab.tryCmd({ "window", "--swap", "west" }, { "window", "--move", "rel:-100:0" })
+  end)
+  kbd.bind(hyper, "l", function()
+    yab.tryCmd({ "window", "--swap", "east" }, { "window", "--move", "rel:100:0" })
+  end)
+  kbd.bind(hyper, "k", function()
+    yab.tryCmd({ "window", "--swap", "north" }, { "window", "--move", "rel:0:-100" })
+  end)
+  kbd.bind(hyper, "j", function()
+    yab.tryCmd({ "window", "--swap", "south" }, { "window", "--move", "rel:0:100" })
+  end)
+
+  -- Move window to display
+  kbd.bind(alt_shift, "w", function() yab.cmd({ "window", "--display", "2", "--focus" }) end)
+  kbd.bind(alt_shift, "s", function() yab.cmd({ "window", "--display", "1", "--focus" }) end)
+
+  -- Layouts
+  kbd.bind(alt, ",", function()
+    yab.tryCmd({ "space", "--rotate", "90" }, { "space", "--layout", "bsp" })
+  end)
+  kbd.bind(alt, "/", function() yab.cmd({ "space", "--layout", "stack" }) end)
+  kbd.bind(alt, "space", function() yab.cmd({ "space", "--layout", "float" }) end)
+
+  -- Fullscreen
+  kbd.bind(alt_shift, "f", function() yab.cmd({ "window", "--toggle", "zoom-fullscreen" }) end)
+  kbd.bind(hyper, "return", function() yab.cmd({ "window", "--toggle", "native-fullscreen" }) end)
+
+  -- Smart resize
+  kbd.bind(hyper, "=", function() yab.helper("smart-resize.sh", "grow", "50") end)
+  kbd.bind(hyper, "-", function() yab.helper("smart-resize.sh", "shrink", "50") end)
+
+  -- Resize perpendicular (uncle)
+  kbd.bind(cmd_alt_ctrl, "=", function() yab.helper("smart-resize.sh", "shrink", "50", "uncle") end)
+  kbd.bind(cmd_alt_ctrl, "-", function() yab.helper("smart-resize.sh", "grow", "50", "uncle") end)
+
+else
+  -- ============================================================
+  -- non-yabai mode
+  -- ============================================================
+
+  -- Focus by direction (hs.window built-in).
+  -- Args: candidates, frontmost, strict
+  local function focusDir(dir)
+    return function()
+      local fw = hs.window.focusedWindow()
+      if not fw then return end
+      local fn = fw["focusWindow" .. dir]
+      fn(fw, nil, true, false)
+    end
+  end
+  kbd.bind(alt, "h", focusDir("West"))
+  kbd.bind(alt, "l", focusDir("East"))
+  kbd.bind(alt, "k", focusDir("North"))
+  kbd.bind(alt, "j", focusDir("South"))
+
+  -- Move floating window by 100 px (no tile-aware swap; tiling = Amethyst).
+  local function moveBy(dx, dy)
+    return function()
+      local fw = hs.window.focusedWindow()
+      if not fw then return end
+      local f = fw:frame()
+      f.x = f.x + dx
+      f.y = f.y + dy
+      fw:setFrame(f)
+    end
+  end
+  kbd.bind(hyper, "h", moveBy(-100, 0))
+  kbd.bind(hyper, "l", moveBy(100, 0))
+  kbd.bind(hyper, "k", moveBy(0, -100))
+  kbd.bind(hyper, "j", moveBy(0, 100))
+
+  -- Move window to next/prev display (matches alt+shift-w/s intent).
+  -- Maps "w" → screen index 2, "s" → screen index 1 (matches yabai config).
+  local function moveToScreen(idx)
+    return function()
+      local fw = hs.window.focusedWindow()
+      if not fw then return end
+      local screens = hs.screen.allScreens()
+      if screens[idx] then
+        fw:moveToScreen(screens[idx], true, true)
+      end
+    end
+  end
+  kbd.bind(alt_shift, "w", moveToScreen(2))
+  kbd.bind(alt_shift, "s", moveToScreen(1))
+
+  -- Native macOS fullscreen
+  kbd.bind(hyper, "return", function()
+    local fw = hs.window.focusedWindow()
+    if fw then fw:toggleFullScreen() end
+  end)
+end
