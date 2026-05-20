@@ -65,42 +65,4 @@ if cfg.IS_YABAI then
       yab.cmd({ "window", "--space", label })
     end)
   end
-
-else
-  -- ============================================================
-  -- non-yabai mode
-  -- ============================================================
-  -- Space focus: native cmd+ctrl+arrow (untouched).
-  -- Space move: hs.spaces by user-space index on focused screen.
-  -- Fullscreen-app spaces filtered out so N matches what user sees
-  -- in Mission Control. alt+shift-0 = space 10.
-
-  local keyToIndex = {
-    ["1"] = 1, ["2"] = 2, ["3"] = 3, ["4"] = 4, ["5"] = 5,
-    ["6"] = 6, ["7"] = 7, ["8"] = 8, ["9"] = 9, ["0"] = 10,
-  }
-
-  local function userSpacesForScreen(screen)
-    local all = hs.spaces.spacesForScreen(screen:getUUID()) or {}
-    local out = {}
-    for _, sid in ipairs(all) do
-      if hs.spaces.spaceType(sid) == "user" then
-        table.insert(out, sid)
-      end
-    end
-    return out
-  end
-
-  for k, n in pairs(keyToIndex) do
-    kbd.bind(alt_shift, k, function()
-      local fw = hs.window.focusedWindow()
-      if not fw then return end
-      local spaces = userSpacesForScreen(fw:screen())
-      if not spaces[n] then
-        hs.alert.show("No space " .. n)
-        return
-      end
-      hs.spaces.moveWindowToSpace(fw:id(), spaces[n])
-    end)
-  end
 end
