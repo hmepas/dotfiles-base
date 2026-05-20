@@ -1,0 +1,46 @@
+# ~/Library/Application Support/Amethyst/.amethyst.yml
+mod1:
+  - option
+  - shift
+mod2:
+  - control
+  - option
+  - shift
+  - command   # = hyper
+
+layouts:
+  - tall
+  - wide
+  - fullscreen
+  - column
+  - floating
+
+# Команды (mod-key пары)
+swap-counterclockwise:
+  mod: mod1
+  key: "h"
+swap-clockwise:
+  mod: mod1
+  key: "l"
+swap-screen-counterclockwise:
+  mod: mod1
+  key: "k"
+swap-screen-clockwise:
+  mod: mod1
+  key: "j"
+toggle-float:
+  mod: mod2
+  key: "f"
+expand-main-pane:
+  mod: mod2
+  key: "="
+shrink-main-pane:
+  mod: mod2
+  key: "-"
+cycle-layout:
+  mod: mod1
+  key: ","
+display-current-layout:
+  mod: mod1
+  key: "/"
+
