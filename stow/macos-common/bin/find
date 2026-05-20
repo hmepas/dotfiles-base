@@ -7,7 +7,7 @@ if [[ $@ ]]; then
 else
     unamestr=`uname`
     if [[ "$unamestr" == 'Darwin' ]]; then
-        $FIND_EXEC *
+        $FIND_EXEC .
     else
         $FIND_EXEC
     fi
