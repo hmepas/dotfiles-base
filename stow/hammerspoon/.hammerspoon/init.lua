@@ -13,12 +13,19 @@ require("modules.windows")
 require("modules.modes.app_launch")
 
 if cfg.IS_YABAI then
-  require("modules.modes.scratchpad")
   require("modules.modes.service")
+  -- Scratchpads are SA-only (sub-layer, --scratchpad, --toggle by LABEL).
+  if cfg.SIP_DISABLED then
+    require("modules.modes.scratchpad")
+  end
 end
 
 -- Optional: replace Karabiner Fn-row media handling on non-yabai mac.
 -- Uncomment to enable. See KARABINER_REPLACEMENT.md.
 -- require("modules.media_keys")
 
-hs.alert.show("Hammerspoon loaded" .. (cfg.IS_YABAI and " [yabai]" or " [no-yabai]"))
+local mode
+if cfg.IS_YABAI_SA then     mode = " [yabai+SA]"
+elseif cfg.IS_YABAI then    mode = " [yabai no-SA]"
+else                        mode = " [no-yabai]" end
+hs.alert.show("Hammerspoon loaded" .. mode)

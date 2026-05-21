@@ -56,15 +56,25 @@ stow -t ~ -d stow macos-common
 
 ```bash
 brew bundle --file=packages/Brewfile.personal
-stow -t ~ -d stow macos-personal
+stow -t ~ -d stow macos-personal macos-yabai-scripts
+touch ~/.sip_disabled   # personal mac runs with SIP off + yabai SA loaded
 ```
+
+`macos-personal` ships the SA-enabled `~/.yabairc`. `macos-yabai-scripts`
+provides `~/.config/yabai/` helper scripts (shared with the work mac).
+`~/.sip_disabled` tells Hammerspoon to enable SA-only bindings (sticky,
+scratchpads, `space --move`).
 
 ### Work Mac (on top of base)
 
 ```bash
 brew bundle --file=packages/Brewfile.work
-stow -t ~ -d stow macos-work
+stow -t ~ -d stow macos-work macos-yabai-scripts
 ```
+
+`macos-work` ships the no-SA `~/.yabairc` (works with SIP enabled).
+Do **not** create `~/.sip_disabled` here — Hammerspoon will then skip
+SA-only bindings that would otherwise no-op against the daemon.
 
 ### Arch Linux
 
@@ -116,8 +126,10 @@ stow -n -v -t ~ -d stow shell   # dry-run, shows what will be symlinked
 | `stow/git/` | `.gitconfig`, global `git/ignore` |
 | `stow/bin/` | cross-platform scripts |
 | `stow/macos-common/` | Any Mac: iTerm2 integration, macfeh, pgcli, neovide, mac-only bin scripts |
-| `stow/macos-personal/` | Personal Mac: yc, gemini, ass aliases |
-| `stow/macos-work/` | Work Mac (currently empty) |
+| `stow/macos-personal/` | Personal Mac: SA-enabled `.yabairc`, yc, gemini, ass aliases |
+| `stow/macos-work/` | Work Mac: no-SA `.yabairc` (SIP-safe variant) |
+| `stow/macos-yabai-scripts/` | Yabai helper scripts → `~/.config/yabai/`. Stow on any yabai mac (personal + work) |
+| `stow/hammerspoon/` | Hammerspoon config — three modes (yabai+SA / yabai no-SA / no-yabai), see its README |
 | `stow/linux/` | Arch (coming later) |
 | `scripts/` | helper utilities |
 | `.gitleaks.toml` | secret scanner rules |

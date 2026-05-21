@@ -1,0 +1,110 @@
+# inspiratin
+# https://github.com/koekeishiya/yabai/blob/master/examples/yabairc
+# https://github.com/koekeishiya/yabai/blob/master/examples/skhdrc
+#
+# On start
+yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
+sudo yabai --load-sa
+~/.config/yabai/if_startup_then_rebalance.sh
+
+# see https://github.com/koekeishiya/yabai/wiki/Tips-and-tricks#fix-folders-opened-from-desktop-not-tiling
+defaults write com.apple.finder DisableAllAnimations -bool true
+# to switch of autorearranging the spaces
+#   defaults write com.apple.dock workspaces-auto-swoosh -boolean NO
+
+borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=5.0 &
+
+# New window spawns to the left if vertical split, or top if horizontal split
+# yabai -m config window_placement first_child
+
+# New window spawns to the right if vertical split, or bottom if horizontal split
+# yabai -m config window_placement second_child
+
+# === COMMON SETTINGS ===
+# - window_origin_display cursor
+#    overwise it's impossible to open new windows on the empty space on another
+#    monitor with keyboard only
+#    
+yabai -m config \
+    layout              stack \
+    mouse_follows_focus on \
+    focus_follows_mouse off \
+    mouse_modifier      ctrl \
+    mouse_action1       resize \
+    mouse_drop_action   stack \
+    window_shadow       float \
+    window_gap          8 \
+    top_padding         2 \
+    bottom_padding      4 \
+    left_padding        4 \
+    right_padding       4 \
+    normal_window_opacity 0.80 \
+    window_origin_display focused \
+    window_placement second_child \
+    window_insertion_point focused \
+    window_animation_duration 0.0 \
+    window_zoom_persist off \
+    external_bar main:0:0
+    #external_bar main:0:28
+
+# Все окна на одном уровне
+yabai -m rule --add app=".*" sub-layer=normal
+
+# --- Всегда плавающие (manage=off) ---
+yabai -m rule --add app="^Finder$" manage=off
+yabai -m rule --add app="^System Settings$" manage=off
+#yabai -m rule --add app="^Calendar$" manage=off
+yabai -m rule --add app="^BetterTouchTool$" manage=off
+yabai -m rule --add app="^Screenshots in Yandex.Disk$" manage=off
+yabai -m rule --add app="^Folx$" manage=off
+yabai -m rule --add app="^Brain.fm$" manage=off
+yabai -m rule --add app="^Raycast$" manage=off
+yabai -m rule --add app="^Albion Online Client$" manage=off
+yabai -m rule --add app="^Cisco AnyConnect Secure Mobility Client$" manage=off
+yabai -m rule --add app="^AmneziaVPN$" manage=off
+yabai -m rule --add app="^Yandex Music$" manage=off
+
+## Common apps
+yabai -m rule --add label="Finder" app="^Finder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off
+yabai -m rule --add label="Safari" app="^Safari$" title="^(General|(Tab|Password|Website|Extension)s|AutoFill|Se(arch|curity)|Privacy|Advance)$" manage=off
+yabai -m rule --add label="macfeh" app="^macfeh$" manage=off
+yabai -m rule --add label="System Preferences" app="^System Preferences$" title=".*" manage=off
+yabai -m rule --add label="App Store" app="^App Store$" manage=off
+yabai -m rule --add label="Activity Monitor" app="^Activity Monitor$" manage=off
+yabai -m rule --add label="Calculator" app="^Calculator$" manage=off
+yabai -m rule --add label="Dictionary" app="^Dictionary$" manage=off
+yabai -m rule --add label="Software Update" title="Software Update" manage=off
+yabai -m rule --add label="About This Mac" app="System Information" title="About This Mac" manage=off
+
+
+# Space mapping
+~/.config/yabai/rearrange_windows.sh
+
+# Приложения прибитые к определенным спейсам
+~/.config/yabai/add_windows_arrange_rules.sh
+
+# to make layout synced
+# more harm than help, so disabled, better to run it manually
+# problem is there are several on those triggers in row, so spaces
+# count out messed up
+yabai -m signal --add event=display_added   action="throt --delay 5 ~/.config/yabai/on_display_layout_change.sh" label='on_display_added'
+yabai -m signal --add event=display_removed action="throt --delay 5 ~/.config/yabai/on_display_layout_change.sh" label='on_display_removed'
+
+# Приложения-спейсы. Когда приложения по дефолту открывается в определенном спейсе,
+# но потом его окна можно окрыть где угоднo
+# Правило для iTerm (только при старте)
+yabai -m rule --add --one-shot app="^iTerm2$" space=sT label="iterm_startup"
+# always one term on, and on space sT, so we could spawn others inplace, but this one always there
+open -a /Applications/iTerm.app/Contents/MacOS/iTerm2
+
+# Правило для Safari (только при старте)
+yabai -m rule --add --one-shot app="^Safari$" space=^sB label="safari_startup"
+open -a /Applications/Safari.app/Contents/MacOS/Safari
+
+~/.config/yabai/simple-bar-conf.sh
+
+# End
+terminal-notifier -title "Yabai" -message "Yabai configuration loaded" -group "yabai"
+
+# restarging yabai on 'cannot focus space because the display is in the middle of an animation.' error in log
+~/bin/yb/yabai_watcher &

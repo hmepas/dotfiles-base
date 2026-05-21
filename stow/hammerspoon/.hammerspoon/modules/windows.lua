@@ -1,8 +1,11 @@
 -- Window management.
 --
--- yabai mac: full set (focus/warp/swap/resize/sticky/float).
+-- yabai mac: full set (focus/warp/swap/resize/float; sticky if SA).
 -- non-yabai mac: focus via hs.window, display move, native fullscreen.
 -- Tiling/swap/resize on non-yabai → Amethyst (see AMETHYST.md).
+--
+-- SA-only bindings (skipped on yabai + SIP-enabled host):
+--   hyper-s   window --toggle sticky
 
 local cfg   = require("config")
 local kbd   = require("modules.keybind")
@@ -18,10 +21,14 @@ if cfg.IS_YABAI then
   -- yabai mode
   -- ============================================================
 
-  -- Float / sticky / split
+  -- Float / split
   kbd.bind(hyper, "f", function() yab.cmd({ "window", "--toggle", "float" }) end)
-  kbd.bind(hyper, "s", function() yab.cmd({ "window", "--toggle", "sticky" }) end)
   kbd.bind(cmd_alt_ctrl, "s", function() yab.cmd({ "window", "--toggle", "split" }) end)
+
+  -- Sticky (SA-only)
+  if cfg.SIP_DISABLED then
+    kbd.bind(hyper, "s", function() yab.cmd({ "window", "--toggle", "sticky" }) end)
+  end
 
   -- Center unmanaged window
   kbd.bind(hyper, "space", function() yab.helper("center_unmanaged_window.sh") end)
