@@ -8,7 +8,9 @@
 tap "acsandmann/tap"
 tap "anomalyco/tap"
 tap "daipeihust/tap"
+tap "felixkratz/formulae"
 tap "hmepas/throt"
+tap "koekeishiya/formulae"
 #tap "minio/stable"
 tap "oven-sh/bun"
 
@@ -17,6 +19,13 @@ brew "hmepas/throt/throt"
 brew "daipeihust/tap/im-select"
 brew "anomalyco/tap/opencode"
 #brew "minio/stable/mc"
+
+# ===== Window manager (SIP-disabled host) =====
+# yabai + JankyBorders + Übersicht referenced from stow/macos-personal/.yabairc
+# and stow/macos-yabai-scripts. SA features need SIP off — personal mac only.
+brew "koekeishiya/formulae/yabai"
+brew "felixkratz/formulae/borders"
+cask "ubersicht"
 
 # ===== Network / tunnels =====
 brew "frpc"
