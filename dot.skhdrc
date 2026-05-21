@@ -1,0 +1,206 @@
+# DEPRECATED: added for reference, functionality moved to hammerspoon
+# Mac OS X virtual keycodes https://gist.github.com/eegrok/949034
+#
+# Yabai
+# for configuring skhd mode in simple-bar: https://github.com/Jean-Tinland/simple-bar/commit/9b7cdd012ba5498d57b99508081f954fbad2bc09
+
+# === MAIN MODE (default) ===
+
+# Spaces
+## Layouts
+alt - 0x2B  : yabai -m space --rotate 90 || yabai -m space --layout bsp       # toggle to bsp or rotate 90 if already in bsp
+alt - 0x2C  : yabai -m space --layout stack     # 'layout accordion' 0x2B=slash
+alt - space : yabai -m space --layout float     # unmanaged space
+
+## --- Переключение фокуса ---
+alt - tab   : yabai -m space --focus recent   # toggle space focus
+alt - 0x32  : yabai -m display --focus recent  # toggle display focus
+
+## Moving spaces between monitors
+alt + shift - tab : yabai -m space --move next
+
+## Focus on space
+### Main monitor work spaces
+alt - 1 : yabai -m space --focus s1
+alt - 2 : yabai -m space --focus s2
+alt - 3 : yabai -m space --focus s3
+alt - 4 : yabai -m space --focus s4
+
+### Second monitor work spaces
+alt - 5 : yabai -m space --focus s5
+alt - 6 : yabai -m space --focus s6
+alt - 7 : yabai -m space --focus s7
+alt - 8 : yabai -m space --focus s8
+alt - 9 : yabai -m space --focus s9
+
+### Unility spaces
+alt - c : yabai -m space --focus sC
+
+alt - v : yabai -m space --focus sV
+
+#alt - g : yabai -m space --focus sG
+#alt - t : yabai -m space --focus sT
+
+alt - b : yabai -m space --focus sB
+alt - m : yabai -m space --focus sM
+
+alt - t : yabai -m space --focus sT
+
+
+# Windows management
+## Toggle float/tile window
+hyper - f : yabai -m window --toggle float
+hyper - space: ~/.config/yabai/center_unmanaged_window.sh
+ctrl + alt + cmd - s : yabai -m window --toggle split
+
+## Toggle sticky window
+hyper - s : yabai -m window --toggle sticky
+
+## Move focus between windows, for vertical movement also move between displays
+alt - h : yabai -m window --focus west
+alt - l : yabai -m window --focus east
+# focus recent is a hack to fix situation when you moved cursor to empty space
+# and now have now focused windows while the focused space aint under cursor (which moved)
+alt - k : yabai -m window --focus north || yabai -m display --focus north || yabai -m window --focus recent
+alt - j : yabai -m window --focus south || yabai -m display --focus south || yabai -m window --focus recent
+
+### switching thru stack windows, or cycle thru all
+alt - n: yabai -m window --focus stack.next
+alt - p: yabai -m window --focus stack.prev
+alt + shift - n: ~/.config/yabai/cycle-space-windows.sh next
+alt + shift - p: ~/.config/yabai/cycle-space-windows.sh prev
+
+
+## Moving window to another split
+alt + shift - h : yabai -m window --warp west
+alt + shift - l : yabai -m window --warp east
+alt + shift - k : yabai -m window --warp north
+alt + shift - j : yabai -m window --warp south
+
+## move managed window thru swapping / move float one
+hyper - h : yabai -m window --swap west || yabai -m window --move rel:-100:0
+hyper - l : yabai -m window --swap east || yabai -m window --move rel:100:0
+hyper - k : yabai -m window --swap north || yabai -m window --move rel:0:-100
+hyper - j : yabai -m window --swap south || yabai -m window --move rel:0:100
+
+## Moving window to display
+alt + shift - w : yabai -m window --display 2 --focus
+alt + shift - s : yabai -m window --display 1 --focus
+
+## Moving window to space
+alt + shift - 1 : yabai -m window --space s1
+alt + shift - 2 : yabai -m window --space s2
+alt + shift - 3 : yabai -m window --space s3
+alt + shift - 4 : yabai -m window --space s4
+
+alt + shift - 5 : yabai -m window --space s5
+alt + shift - 6 : yabai -m window --space s6
+alt + shift - 7 : yabai -m window --space s7
+alt + shift - 8 : yabai -m window --space s8
+alt + shift - 9 : yabai -m window --space s9
+
+alt + shift - c : yabai -m window --space sC
+alt + shift - p : yabai -m window --space sP
+alt + shift - v : yabai -m window --space sV
+alt + shift - g : yabai -m window --space sG
+alt + shift - t : yabai -m window --space sT
+alt + shift - b : yabai -m window --space sB
+alt + shift - m : yabai -m window --space sM
+
+## Windows resize
+### Fullscreen
+alt + shift - f : yabai -m window --toggle zoom-fullscreen
+hyper - return: yabai -m window --toggle native-fullscreen
+
+### Smart resize
+hyper - 0x18: ~/.config/yabai/smart-resize.sh grow 50
+hyper - 0x1B: ~/.config/yabai/smart-resize.sh shrink 50
+
+### Resize perpendicular to the split
+ctrl + alt + cmd - 0x18: ~/.config/yabai/smart-resize.sh shrink 50 uncle
+ctrl + alt + cmd - 0x1B: ~/.config/yabai/smart-resize.sh grow 50 uncle
+
+
+
+# Applications shortcuts
+#alt - t : open -a /Applications/iTerm.app/Contents/MacOS/iTerm2
+alt - o : open -a /Applications/Obsidian.app/Contents/MacOS/Obsidian
+alt - w : open -a /Applications/Bitwarden.app/Contents/MacOS/Bitwarden # passWords
+alt - g : open -a /Applications/Telegram.app/Contents/MacOS/Telegram && yabai -m space --focus sG
+alt - s : open -a /Applications/Safari.app/Contents/MacOS/Safari
+alt - r : open "obsidian://open?vault=zk&file=SelfTracking/1.Daily Notes/DAR 2026 WB and my own projects"; sleep 0.5 ; skhd -k 'ctrl - d' # daily activity Report always by hand
+
+alt - f : ~/.config/yabai/finder-toggle.sh
+
+
+# === MODES ===
+:: default : ~/.config/yabai/ubersicht-widgets/simple-bar/lib/scripts/yabai-set-mode-server.sh '' main \
+    && curl -qs http://localhost:7776/skhd/mode/refresh
+
+## === SCRATCHPAD ASSIGN MODE ===
+:: scratchpad_assign : ~/.config/yabai/ubersicht-widgets/simple-bar/lib/scripts/yabai-set-mode-server.sh 'scratchpad' red \
+    && curl -qs http://localhost:7776/skhd/mode/refresh
+
+hyper - 0 ; scratchpad_assign
+hyper - 1 : yabai -m window --toggle sw1
+hyper - 2 : yabai -m window --toggle sw2
+hyper - 3 : yabai -m window --toggle sw3
+hyper - 4 : yabai -m window --toggle sw4
+hyper - 5 : yabai -m window --toggle sw5
+hyper - 6 : yabai -m window --toggle sw6
+hyper - 7 : yabai -m window --toggle sw7
+hyper - 8 : yabai -m window --toggle sw8
+hyper - 9 : yabai -m window --toggle sw9
+
+scratchpad_assign < 1 : yabai -m window --sub-layer above --scratchpad sw1 ; skhd -k escape
+scratchpad_assign < 2 : yabai -m window --sub-layer above --scratchpad sw2 ; skhd -k escape
+scratchpad_assign < 3 : yabai -m window --sub-layer above --scratchpad sw3 ; skhd -k escape
+scratchpad_assign < 4 : yabai -m window --sub-layer above --scratchpad sw4 ; skhd -k escape
+scratchpad_assign < 5 : yabai -m window --sub-layer above --scratchpad sw5 ; skhd -k escape
+scratchpad_assign < 6 : yabai -m window --sub-layer above --scratchpad sw6 ; skhd -k escape
+scratchpad_assign < 7 : yabai -m window --sub-layer above --scratchpad sw7 ; skhd -k escape
+scratchpad_assign < 8 : yabai -m window --sub-layer above --scratchpad sw8 ; skhd -k escape
+scratchpad_assign < 9 : yabai -m window --sub-layer above --scratchpad sw9 ; skhd -k escape
+scratchpad_assign < 0 : yabai -m window --sub-layer normal --scratchpad recover ; skhd -k escape
+
+scratchpad_assign < return  ; default
+scratchpad_assign < escape  ; default
+
+## === APP LAUNCH MODE ===
+:: app_launch : ~/.config/yabai/ubersicht-widgets/simple-bar/lib/scripts/yabai-set-mode-server.sh app_launch red \
+    && curl -qs http://localhost:7776/skhd/mode/refresh
+
+alt - a ; app_launch
+app_launch < w : open -a /Applications/WhatsApp.app/Contents/MacOS/WhatsApp ; skhd -k escape
+app_launch < r : open -a /Applications/OBS.app/Contents/MacOS/OBS ; skhd -k escape
+app_launch < m : open -a "/Applications/Яндекс Музыка.app/Contents/MacOS/Яндекс Музыка"; skhd -k escape
+app_launch < c : open -a Calendar; skhd -k escape
+app_launch < t : ~/.config/yabai/new-iterm-window.sh ; skhd -k escape
+app_launch < s : osascript -e 'tell application "Safari" to make new document' ; skhd -k escape
+#app_launch < n : open "obsidian://open?vault=zk&file=Notes/DAR 2025 sabbatical.md"; skhd -k escape ; sleep 0.5 ; skhd -k 'ctrl - d' # daily activity report always by hand
+app_launch < return  ; default
+app_launch < escape  ; default
+
+# === SERVICE MODE === 
+# Usefull for disabling all skhd hotkeys
+:: service_mode : ~/.config/yabai/ubersicht-widgets/simple-bar/lib/scripts/yabai-set-mode-server.sh service_mode red \
+    && curl -qs http://localhost:7776/skhd/mode/refresh
+
+hyper - 0x29 ; service_mode # ; (semicolon) key
+service_mode < return  ; default
+service_mode < escape  ; default
+
+# Other stuff
+
+## Disable system hotkeys
+cmd - h : :
+cmd - m : :
+cmd + alt - h : :
+cmd + shift - w : :
+
+## Close notifications
+alt - d : osascript ~/.config/skhd/applescripts/notifications.scpt
+
+alt - i : osascript ~/.config/skhd/applescripts/menu.scpt
+shift + alt - i : osascript ~/.config/skhd/applescripts/toggle_menu_autohide.scpt
+
