@@ -5,9 +5,11 @@
 #   - removed: normal_window_opacity 0.80    (requires SA)
 #   - removed: rule app=".*" sub-layer=normal (rule sub-layer requires SA)
 # Heads-up: external helper scripts (rearrange_windows.sh, add_windows_arrange_rules.sh,
-# on_display_layout_change.sh, if_startup_then_rebalance.sh, simple-bar-conf.sh) are
-# kept as-is — review them and strip any space --create/--destroy/--move/--swap/--switch,
-# display --space, --toggle sticky/pip/shadow, --sub-layer, --opacity, --scratchpad calls.
+# on_display_layout_change.sh, if_startup_then_rebalance.sh) are kept as-is — review
+# them and strip any space --create/--destroy/--move/--swap/--switch, display --space,
+# --toggle sticky/pip/shadow, --sub-layer, --opacity, --scratchpad calls.
+# simple-bar-conf.sh + borders intentionally NOT sourced here: Übersicht/JankyBorders
+# are personal-mac only — work host stays minimal.
 
 # inspiratin
 # https://github.com/koekeishiya/yabai/blob/master/examples/yabairc
@@ -20,8 +22,6 @@
 defaults write com.apple.finder DisableAllAnimations -bool true
 # to switch of autorearranging the spaces
 #   defaults write com.apple.dock workspaces-auto-swoosh -boolean NO
-
-borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=5.0 &
 
 # New window spawns to the left if vertical split, or top if horizontal split
 # yabai -m config window_placement first_child
@@ -104,8 +104,6 @@ open -a /Applications/iTerm.app/Contents/MacOS/iTerm2
 # Правило для Safari (только при старте)
 yabai -m rule --add --one-shot app="^Safari$" space=^sB label="safari_startup"
 open -a /Applications/Safari.app/Contents/MacOS/Safari
-
-~/.config/yabai/simple-bar-conf.sh
 
 # End
 terminal-notifier -title "Yabai" -message "Yabai configuration loaded" -group "yabai"

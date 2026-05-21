@@ -51,8 +51,10 @@ function M.helper(script, ...)
 end
 
 -- simple-bar mode indicator. Two commands chained — use shell + PATH.
+-- Gated by IS_YABAI_SA: Übersicht/simple-bar is personal-mac only (work host
+-- doesn't install ubersicht — see Brewfile.personal).
 function M.setSimpleBarMode(name, color)
-  if not cfg.IS_YABAI then return end
+  if not cfg.IS_YABAI_SA then return end
   local cmd = string.format(
     "%s '%s' %s && curl -qs %s",
     cfg.YABAI_MODE_SCRIPT, name, color, cfg.SIMPLE_BAR_REFRESH)
