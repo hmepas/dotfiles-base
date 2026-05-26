@@ -14,9 +14,6 @@
 # inspiratin
 # https://github.com/koekeishiya/yabai/blob/master/examples/yabairc
 # https://github.com/koekeishiya/yabai/blob/master/examples/skhdrc
-#
-# On start
-~/.config/yabai/if_startup_then_rebalance.sh
 
 # see https://github.com/koekeishiya/yabai/wiki/Tips-and-tricks#fix-folders-opened-from-desktop-not-tiling
 defaults write com.apple.finder DisableAllAnimations -bool true
@@ -53,6 +50,26 @@ yabai -m config \
     window_zoom_persist off \
     external_bar main:0:0
     #external_bar main:0:28
+
+~/.config/yabai/top-up-spaces-hs.sh
+
+yabai -m space 1 --label "s1"
+yabai -m space 2 --label "s2"
+yabai -m space 3 --label "s3"
+yabai -m space 4 --label "s4"
+yabai -m space 5 --label "s5"
+yabai -m space 6 --label "s6"
+yabai -m space 7 --label "s7"
+yabai -m space 8 --label "s8"
+yabai -m space 9 --label "s9"
+yabai -m space 10 --label "s16"
+yabai -m space 11 --label "sC"
+yabai -m space 12 --label "sV"
+yabai -m space 13 --label "sM"
+yabai -m space 14 --label "sT"
+yabai -m space 15 --label "sG"
+yabai -m space 16 --label "sB"
+
 
 # --- Всегда плавающие (manage=off) ---
 yabai -m rule --add app="^Finder$" manage=off
@@ -107,6 +124,3 @@ open -a /Applications/Safari.app/Contents/MacOS/Safari
 
 # End
 terminal-notifier -title "Yabai" -message "Yabai configuration loaded" -group "yabai"
-
-# restarging yabai on 'cannot focus space because the display is in the middle of an animation.' error in log
-~/bin/yb/yabai_watcher &

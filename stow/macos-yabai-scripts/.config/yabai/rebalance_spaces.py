@@ -320,9 +320,28 @@ def main() -> None:
     trim_extra_spaces(set(label_order))
 
 
+def rename_only() -> None:
+    displays = query_displays()
+    if len(displays) == 1:
+        print("Single display configuration")
+        ensure_space_count(len(SINGLE_DISPLAY_LABELS) + 1)
+    else: 
+        print("Double display configuration")
+        ensure_space_count(len(DUAL_DISPLAY_LABELS) + 1)
+
+
+    label_order = DUAL_DISPLAY_LABELS if len(displays) > 1 else SINGLE_DISPLAY_LABELS
+    rename_spaces(label_order)
+
+
 if __name__ == "__main__":
     try:
-        main()
+        from pathlib import Path
+        if Path("~/.sip_disabled").is_file(): 
+            main()
+        else:
+            print("sipnot disabled")
+            rename_only()
     except YabaiError as error:
         print(str(error), file=sys.stderr)
         sys.exit(1)
