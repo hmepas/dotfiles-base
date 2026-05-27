@@ -2,7 +2,15 @@
 - **graphify** (`~/.claude/skills/graphify/SKILL.md`) - any input to knowledge graph. Trigger: `/graphify`
 When the user types `/graphify`, invoke the Skill tool with `skill: "graphify"` before doing anything else.
 
-# Common rules CLAUDE.md
+# Global preferences
+
+## Language
+
+- All code, config files, comments, commit messages, and README files: **English**.
+- Throwaway PRDs, design notes, and implementation plans: Russian is fine (user's native language); ask if unsure.
+- Conversations with the user: Russian by default — match the language the user writes in.
+
+# Common coding rules
 
 Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-specific instructions as needed.
 
