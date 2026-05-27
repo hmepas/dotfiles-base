@@ -191,7 +191,7 @@ def create_space_and_label(label: str) -> None:
     time.sleep(SPACE_MOVE_DELAY_SECONDS)
     new_space = get_last_empty_labeled_space_index()
     print_and_log(f"new space created: {new_space} naming it {label}")
-    run_yabai("space", str(new_space), "--label", label)
+    run_yabai("space", str(new_space), "--label", label, '--display', '1')
     time.sleep(SPACE_MOVE_DELAY_SECONDS)
 
 
