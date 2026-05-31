@@ -49,6 +49,7 @@ hs -c "print(require('config').IS_YABAI, require('config').SIP_DISABLED)"
 | `modules/keybind.lua`            | `hs.hotkey.bind` wrapper + disableAll    | both       |
 | `modules/yabai.lua`              | yabai calls / helper scripts             | both (no-op without yabai) |
 | `modules/system.lua`             | block cmd-h/m, AppleScripts (alt-d/i)    | both (AS yabai only) |
+| `modules/input_sources.lua`      | cmd-space EN/RU, ctrl-cmd-c Chinese      | both       |
 | `modules/apps.lua`               | alt-o/w/g/s/r/m/f                        | both, different |
 | `modules/spaces.lua`             | alt-1..9 / alt-tab / window→space        | both, different |
 | `modules/windows.lua`            | focus/swap/warp/resize/display           | both, different |
