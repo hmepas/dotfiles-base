@@ -23,5 +23,6 @@ M.alt           = { "alt" }
 M.alt_shift     = { "alt", "shift" }
 M.hyper         = { "ctrl", "alt", "shift", "cmd" }
 M.cmd_alt_ctrl  = { "cmd", "alt", "ctrl" }
+M.super         = M.cmd_alt_ctrl -- CapsLock via Karabiner
 
 return M

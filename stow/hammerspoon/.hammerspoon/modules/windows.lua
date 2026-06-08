@@ -15,6 +15,64 @@ local alt        = kbd.alt
 local alt_shift  = kbd.alt_shift
 local hyper      = kbd.hyper
 local cmd_alt_ctrl = kbd.cmd_alt_ctrl
+local super      = kbd.super
+
+local function centeredFocusFrame(screenFrame)
+  local width = math.max(1000, screenFrame.w * 0.40)
+  local height = width * 0.75 -- 4:3
+
+  local maxWidth = screenFrame.w * 0.85
+  local maxHeight = screenFrame.h * 0.85
+  if width > maxWidth then
+    width = maxWidth
+    height = width * 0.75
+  end
+  if height > maxHeight then
+    height = maxHeight
+    width = height * 4 / 3
+  end
+
+  return hs.geometry.rect(
+    screenFrame.x + (screenFrame.w - width) / 2,
+    screenFrame.y + (screenFrame.h - height) / 2,
+    width,
+    height
+  )
+end
+
+local function centerFocusedWindow(resize)
+  local fw = hs.window.focusedWindow()
+  if not fw then return end
+
+  local screen = fw:screen() or hs.screen.mainScreen()
+  local frame = resize and centeredFocusFrame(screen:frame()) or fw:frame()
+  if not resize then
+    local sf = screen:frame()
+    frame.x = sf.x + (sf.w - frame.w) / 2
+    frame.y = sf.y + (sf.h - frame.h) / 2
+  end
+
+  fw:setFrame(frame, 0)
+end
+
+local function yabaiFocusedWindowIsFloating()
+  local out, ok = hs.execute(cfg.YABAI_BIN .. " -m query --windows --window 2>/dev/null", true)
+  if not ok or not out or out == "" then return false end
+  local win = hs.json.decode(out)
+  return win and win["is-floating"] == true
+end
+
+local function floatAndCenterFocusedWindow()
+  if cfg.IS_YABAI and not yabaiFocusedWindowIsFloating() then
+    yab.cmd({ "window", "--toggle", "float" })
+    hs.timer.doAfter(0.08, function() centerFocusedWindow(true) end)
+  else
+    centerFocusedWindow(true)
+  end
+end
+
+-- Make current window floating (on yabai), resize to focused 4:3 area, and center it.
+kbd.bind(super, "c", floatAndCenterFocusedWindow)
 
 if cfg.IS_YABAI then
   -- ============================================================
@@ -30,8 +88,8 @@ if cfg.IS_YABAI then
     kbd.bind(hyper, "s", function() yab.cmd({ "window", "--toggle", "sticky" }) end)
   end
 
-  -- Center unmanaged window
-  kbd.bind(hyper, "space", function() yab.helper("center_unmanaged_window.sh") end)
+  -- Center unmanaged window without resizing (legacy binding from skhd).
+  kbd.bind(hyper, "space", function() centerFocusedWindow(false) end)
 
   -- Focus by direction. Fallback to display, then to recent window.
   kbd.bind(alt, "h", function() yab.cmd({ "window", "--focus", "west" }) end)
