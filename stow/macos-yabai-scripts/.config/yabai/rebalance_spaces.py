@@ -8,6 +8,7 @@ import json
 import subprocess
 import sys
 import time
+from pathlib import Path
 from dataclasses import dataclass
 from typing import Dict, Iterable, List, Optional, Set
 
@@ -336,11 +337,10 @@ def rename_only() -> None:
 
 if __name__ == "__main__":
     try:
-        from pathlib import Path
-        if Path("~/.sip_disabled").is_file(): 
+        if Path(Path.home() / ".sip_disabled").is_file():
             main()
         else:
-            print("sipnot disabled")
+            print("sip not disabled")
             rename_only()
     except YabaiError as error:
         print(str(error), file=sys.stderr)
