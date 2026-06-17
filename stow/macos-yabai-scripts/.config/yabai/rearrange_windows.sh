@@ -3,6 +3,9 @@
 # Приложения прибитые к определенным спейсам
 yabai -m rule --apply app="^Cursor$" space=sC label="cursor_placement"
 
+# Outlook Calendar — на sC, остальные окна Outlook — на sM (через title!= — встроенная инверсия yabai)
+yabai -m rule --apply app="^Microsoft Outlook$" title="^Calendar$" space=sC label="outlook_calendar_placement"
+
 yabai -m rule --apply app="^Telegram$" space=sG label="telegram_placement"
 yabai -m rule --apply app="^WhatsApp$" space=sG label="whatsapp_placement"
 
@@ -22,5 +25,6 @@ yabai -m rule --apply app="^Yandex Telemost$" space=sV label="yandextelemost_pla
 # Приложения у который всегда одно окно, прибитые на хоткей
 yabai -m rule --apply app="^Bitwarden$" space=s16 label="bitwarden_placement"
 yabai -m rule --apply app="^Obsidian$" space=s16 label="obsidian_placement"
+yabai -m rule --apply app="^Microsoft Outlook$" title!="^Calendar$" space=sM label="outlook_remaining_placement"
 yabai -m rule --apply app="^Gmail$" space=^sM label="gmail_placement"
 

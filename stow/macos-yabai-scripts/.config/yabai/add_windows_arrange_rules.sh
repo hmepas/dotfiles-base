@@ -5,6 +5,9 @@
 # Coding context (for IDE, terminals excluded)
 yabai -m rule --add app="^Cursor$" space=^sC label="cursor_placement"
 
+# Outlook Calendar — на sC, остальные окна Outlook — на sM (через title!= — встроенная инверсия yabai)
+yabai -m rule --add app="^Microsoft Outlook$" title="^Calendar$" space=^sC label="outlook_calendar_placement"
+
 # Messengers teleGram
 yabai -m rule --add app="^Telegram$" space=^sG label="telegram_placement"
 yabai -m rule --add app="WhatsApp$" space=^sG label="whatsapp_placement"
@@ -18,6 +21,7 @@ yabai -m rule --add app="^Raycast$" space=^s9 label="raycast_placement"
 yabai -m rule --add app="^OBS Studio$" space=^s9 label="obs_placement"
 
 # Mail context
+yabai -m rule --add app="^Microsoft Outlook$" title!="^Calendar$" space=^sM label="outlook_remaining_placement"
 yabai -m rule --add app="^Gmail$" space=^sM label="gmail_placement"
 
 # Video confs
