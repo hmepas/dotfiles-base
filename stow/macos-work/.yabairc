@@ -52,6 +52,7 @@ yabai -m config \
     #external_bar main:0:28
 
 ~/.config/yabai/top-up-spaces-hs.sh
+~/.config/yabai/rebalance_spaces.py
 
 yabai -m space 1 --label "s1"
 yabai -m space 2 --label "s2"
