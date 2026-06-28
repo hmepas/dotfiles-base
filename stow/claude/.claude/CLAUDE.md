@@ -6,6 +6,20 @@
 - Throwaway PRDs, design notes, and implementation plans: Russian is fine (user's native language); ask if unsure.
 - Conversations with the user: Russian by default — match the language the user writes in.
 
+# Secrets / sensitive files
+
+**Never read `.env` (or other secret-bearing files) directly via the Read/readFile tool** —
+even in dev they may hold real secrets (OAuth client secrets, JWT keys, DB creds), and
+reading them dumps the values into the conversation context. Applies to all projects.
+
+Instead:
+- To check a non-sensitive value (e.g. a URL), grep it out one key at a time:
+  `grep '^PUBLIC_MAPPER_URL=' .env`.
+- To inspect which keys exist or confirm a value's shape without exposing it, mask in bash:
+  e.g. `sed -E 's/=.*/=***/' .env` (keys only), or `grep -c SECRET .env`.
+- When you need to *edit* `.env`, use `Edit` with a known anchor line rather than reading
+  the whole file, or append via bash.
+
 # Common coding rules
 
 Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-specific instructions as needed.
