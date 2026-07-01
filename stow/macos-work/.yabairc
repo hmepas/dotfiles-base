@@ -54,24 +54,6 @@ yabai -m config \
 ~/.config/yabai/top-up-spaces-hs.sh
 ~/.config/yabai/rebalance_spaces.py
 
-yabai -m space 1 --label "s1"
-yabai -m space 2 --label "s2"
-yabai -m space 3 --label "s3"
-yabai -m space 4 --label "s4"
-yabai -m space 5 --label "s5"
-yabai -m space 6 --label "s6"
-yabai -m space 7 --label "s7"
-yabai -m space 8 --label "s8"
-yabai -m space 9 --label "s9"
-yabai -m space 10 --label "s16"
-yabai -m space 11 --label "sC"
-yabai -m space 12 --label "sV"
-yabai -m space 13 --label "sM"
-yabai -m space 14 --label "sT"
-yabai -m space 15 --label "sG"
-yabai -m space 16 --label "sB"
-
-
 # --- Всегда плавающие (manage=off) ---
 yabai -m rule --add app="^Finder$" manage=off
 yabai -m rule --add app="^System Settings$" manage=off
@@ -85,6 +67,7 @@ yabai -m rule --add app="^Albion Online Client$" manage=off
 yabai -m rule --add app="^Cisco AnyConnect Secure Mobility Client$" manage=off
 yabai -m rule --add app="^AmneziaVPN$" manage=off
 yabai -m rule --add app="^Yandex Music$" manage=off
+yabai -m rule --add app="^qemu-system-aarch64$" manage=off
 
 ## Common apps
 yabai -m rule --add label="Finder" app="^Finder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off
