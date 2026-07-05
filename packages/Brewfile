@@ -31,6 +31,14 @@ brew "gdu"
 brew "gh"
 brew "git-filter-repo"
 brew "difftastic"
+brew "hunk" # code review tool
+
+# ===== Some mine taps =====
+tap "hmepas/throt"
+tap "hmepas/resume"
+
+brew "hmepas/throt/throt"
+brew "hmepas/resume/resume"
 
 # ===== Base dev tools =====
 brew "cmake"
