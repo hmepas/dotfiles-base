@@ -31,9 +31,23 @@ brew bundle --file=packages/Brewfile
 # 4. Base symlinking
 stow -t ~ -d stow shell term git bin-common
 
-# 5. TPM for tmux plugins
+# 5. Shared agent skills (Claude, Codex, Pi)
+./scripts/setup-agent-skills.sh
+
+# 6. TPM for tmux plugins
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 # Inside tmux: prefix + I
+```
+
+`setup-agent-skills.sh` clones the xlsx skill into `~/.agents/skills/xlsx` and
+links it into Claude, Codex, and Pi. Override its personal local source when
+needed: `SKILL_REPO=<repository-url-or-path> ./scripts/setup-agent-skills.sh`.
+
+When stowing the `claude` package, use `--no-folding` so `~/.claude` remains a
+directory and skills are not written into this repository:
+
+```bash
+stow --no-folding -t ~ -d stow claude
 ```
 
 ### Any GUI host (Mac or Linux desktop)
