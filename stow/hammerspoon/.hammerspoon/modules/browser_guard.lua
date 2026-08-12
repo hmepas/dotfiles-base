@@ -17,7 +17,6 @@ local BROWSERS = { ["Safari"] = true }
 local guards = {
   { mods = { "cmd" }, key = "n", paths = { { "File", "New Window" } } },
   { mods = { "cmd" }, key = "t", paths = { { "File", "New Tab" } } },
-  { mods = { "cmd" }, key = "w", paths = { { "File", "Close Tab" }, { "File", "Close Window" } } },
 }
 
 M.keys = {}
