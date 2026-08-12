@@ -1,10 +1,17 @@
-# Global preferences
+!!When reporting information to me, be extremely consice and sacrifice grammar for the sake of concision!!
+
+!!When working with .env and similar files, dont read them directory, use grep/cut for particular keys so the secrets wouldn't be leaked!!
+
+!!Never try to SSH without my explicit demand for that!!
+
+# Global preferences when working on code
+
 
 ## Language
 
 - All code, config files, comments, commit messages, and README files: **English**.
 - Throwaway PRDs, design notes, and implementation plans: Russian is fine (user's native language); ask if unsure.
-- Conversations with the user: Russian by default — match the language the user writes in.
+- Conversations with the user: Match the language the user writes in.
 
 # Secrets / sensitive files
 
