@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- simple-bar-server: push refresh events from yabai signals (HTTP :7776)
+	     to the Übersicht simple-bar widget (WS :7777). Replaces the old pm2 setup. -->
+	<key>Label</key>
+	<string>com.hmepas.simple-bar-server</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/opt/homebrew/bin/node</string>
+		<string>/Users/hmepas/.config/yabai/simple-bar-server/index.js</string>
+	</array>
+	<key>WorkingDirectory</key>
+	<string>/Users/hmepas/.config/yabai/simple-bar-server</string>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>KeepAlive</key>
+	<true/>
+	<key>StandardOutPath</key>
+	<string>/Users/hmepas/Library/Logs/simple-bar-server.log</string>
+	<key>StandardErrorPath</key>
+	<string>/Users/hmepas/Library/Logs/simple-bar-server.log</string>
+</dict>
+</plist>

@@ -79,6 +79,14 @@ provides `~/.config/yabai/` helper scripts (shared with the work mac).
 `~/.sip_disabled` tells Hammerspoon to enable SA-only bindings (sticky,
 scratchpads, `space --move`).
 
+`macos-personal` also ships `~/Library/LaunchAgents/com.hmepas.simple-bar-server.plist`
+(simple-bar-server for the Übersicht simple-bar widget; expects a clone at
+`~/.config/yabai/simple-bar-server` and brew `node`). First time after stow:
+
+```bash
+launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.hmepas.simple-bar-server.plist
+```
+
 ### Work Mac (on top of base)
 
 ```bash
