@@ -7,6 +7,7 @@ hs.allowAppleScript(true)
 local cfg = require("config")
 
 require("modules.system")
+require("modules.secure_input_watch")
 require("modules.input_sources")
 require("modules.apps")
 require("modules.spaces")
