@@ -147,7 +147,7 @@ local function buildSheet()
 
   c:appendElements({
     type = "text",
-    text = "✦ hyper (⌃⌥⇧⌘)   ⇪ super (CapsLock, ⌘⌥⌃)   (SA) personal mac only   ⎋ / click / ✦ / to close",
+    text = "✦ hyper (⌃⌥⇧⌘)   ⇪ super (CapsLock, ⌘⌥⌃)   (SA) personal mac only   ⎋ / click / same chord to close",
     textFont = ".AppleSystemUIFont", textSize = 11.5,
     textColor = COLORS.dim, textAlignment = "center",
     frame = { x = 0, y = h - LEGEND_H, w = w, h = ROW_H },
@@ -226,6 +226,9 @@ end
 M.accentRed = COLORS.red
 
 kbd.setGroup("Modes")
-kbd.bind(kbd.hyper, "/", "This cheatsheet", M.toggle)
+-- NOTE: not hyper-/ — macOS reserves ⌃⌥⇧⌘ + . , / as diagnostic
+-- keychords (sysdiagnose family), eaten by WindowServer before any
+-- event tap. alt+shift-/ = "alt+?".
+kbd.bind(kbd.alt_shift, "/", "This cheatsheet", M.toggle)
 
 return M
