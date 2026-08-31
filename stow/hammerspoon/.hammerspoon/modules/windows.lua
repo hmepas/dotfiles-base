@@ -81,6 +81,11 @@ if cfg.IS_YABAI then
   -- yabai mode
   -- ============================================================
 
+  -- Close focused window via yabai (phantom windows only visible through
+  -- bsp+borders, where cmd-w has nothing to grab onto). Physically fn+c:
+  -- Karabiner maps fn to hyper on this host.
+  kbd.bind(hyper, "c", "Close window (yabai)", function() yab.cmd({ "window", "--close" }) end)
+
   -- Float / split
   kbd.bind(hyper, "f", "Toggle float", function() yab.cmd({ "window", "--toggle", "float" }) end)
   kbd.bind(cmd_alt_ctrl, "s", "Toggle split", function() yab.cmd({ "window", "--toggle", "split" }) end)
