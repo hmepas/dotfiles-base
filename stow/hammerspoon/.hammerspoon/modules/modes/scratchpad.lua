@@ -10,8 +10,12 @@
 
 local kbd = require("modules.keybind")
 local yab = require("modules.yabai")
+local cs  = require("modules.cheatsheet")
+
+kbd.setGroup("Modes")
 
 -- Direct toggle bindings
+kbd.register(kbd.hyper, "1…9", "Toggle scratchpad 1–9 (SA)")
 for i = 1, 9 do
   kbd.bind(kbd.hyper, tostring(i), function()
     yab.cmd({ "window", "--toggle", "sw" .. i })
@@ -19,22 +23,27 @@ for i = 1, 9 do
 end
 
 local m = hs.hotkey.modal.new()
-local alertId
+
+local MODE_KEYS = {
+  { key = "1…9", desc = "assign window to scratchpad" },
+  { key = "0",   desc = "recover (drop assignment)" },
+  { key = "⎋ ⏎", desc = "cancel" },
+}
 
 local function enterMode()
   yab.setSimpleBarMode("scratchpad", "red")
-  alertId = hs.alert.show("SCRATCHPAD ASSIGN", true)
+  cs.showMode("SCRATCHPAD ASSIGN", MODE_KEYS)
   m:enter()
 end
 
 local function exitMode()
   m:exit()
   yab.setSimpleBarMode("", "main")
-  if alertId then hs.alert.closeSpecific(alertId) end
+  cs.hideMode()
 end
 
 -- hyper - 0: enter assign mode
-kbd.bind(kbd.hyper, "0", enterMode)
+kbd.bind(kbd.hyper, "0", "Scratchpad assign mode (SA)", enterMode)
 
 -- 1..9 inside mode: assign current window to swN
 for i = 1, 9 do

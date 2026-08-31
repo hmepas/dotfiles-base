@@ -54,6 +54,7 @@ hs -c "print(require('config').IS_YABAI, require('config').SIP_DISABLED)"
 | `modules/apps.lua`               | alt-o/w/g/s/r/m/f                        | both, different |
 | `modules/spaces.lua`             | alt-1..9 / alt-tab / window→space        | both, different |
 | `modules/windows.lua`            | focus/swap/warp/resize/display           | both, different |
+| `modules/cheatsheet.lua`         | hyper-/ hotkey overlay + mode popups (auto-generated from keybind registry) | both |
 | `modules/modes/app_launch.lua`   | alt-a → ...                              | both       |
 | `modules/modes/scratchpad.lua`   | hyper-0 / hyper-1..9                     | yabai + SA |
 | `modules/modes/service.lua`      | hyper-`;` mode                           | yabai      |

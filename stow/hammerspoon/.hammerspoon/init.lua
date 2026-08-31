@@ -14,6 +14,7 @@ require("modules.spaces")
 require("modules.windows")
 require("modules.modes.app_launch")
 require("modules.browser_guard")
+require("modules.cheatsheet") -- hyper-/ overlay (also loaded via modes)
 
 if cfg.IS_YABAI then
   require("modules.modes.service")

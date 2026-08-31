@@ -8,9 +8,14 @@
 -- NOTE: these hotkeys live outside kbd.list on purpose — service-mode
 -- enableAll() would otherwise re-enable them outside the browser.
 
+local kbd = require("modules.keybind")
+
 local M = {}
 
 local BROWSERS = { ["Safari"] = true }
+
+kbd.setGroup("System")
+kbd.register({ "cmd" }, "n / t", "Safari: real New Window / Tab")
 
 -- combo → ordered menu-path candidates (first that selects wins;
 -- Close Tab is disabled when a window has a single tab → Close Window)

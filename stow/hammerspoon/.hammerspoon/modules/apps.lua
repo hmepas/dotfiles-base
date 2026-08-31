@@ -16,14 +16,16 @@ local function launch(app)
   return function() hs.application.launchOrFocus(app) end
 end
 
+kbd.setGroup("Apps")
+
 -- Common: same on both hosts
-kbd.bind(alt, "o", launch("Obsidian"))
-kbd.bind(alt, "w", launch("Bitwarden"))
-kbd.bind(alt, "s", launch("Safari"))
+kbd.bind(alt, "o", "Obsidian", launch("Obsidian"))
+kbd.bind(alt, "w", "Bitwarden", launch("Bitwarden"))
+kbd.bind(alt, "s", "Safari", launch("Safari"))
 
 -- alt - r: Obsidian DAR + ctrl+d (today's daily note shortcut).
 -- Works on both hosts (no yabai dependency).
-kbd.bind(alt, "r", function()
+kbd.bind(alt, "r", "Obsidian daily note (DAR)", function()
   hs.execute("open 'obsidian://open?vault=zk&file=SelfTracking/1.Daily%20Notes/DAR%202026%20WB%20and%20my%20own%20projects'")
   hs.timer.doAfter(0.5, function()
     hs.eventtap.keyStroke({ "ctrl" }, "d")
@@ -36,22 +38,22 @@ if cfg.IS_YABAI then
   -- ============================================================
 
   -- alt - g: Telegram + focus sG
-  kbd.bind(alt, "g", function()
+  kbd.bind(alt, "g", "Telegram → space sG", function()
     hs.application.launchOrFocus("Telegram")
     yab.cmd({ "space", "--focus", "sG" })
   end)
 
   -- alt - f: Finder toggle helper
-  kbd.bind(alt, "f", function() yab.helper("finder-toggle.sh") end)
+  kbd.bind(alt, "f", "Finder toggle", function() yab.helper("finder-toggle.sh") end)
 
 else
   -- ============================================================
   -- non-yabai launchers (no space focus)
   -- ============================================================
 
-  kbd.bind(alt, "g", launch("Telegram"))
-  kbd.bind(alt, "m", launch("Microsoft Outlook"))
-  kbd.bind(alt, "f", launch("Finder"))
+  kbd.bind(alt, "g", "Telegram", launch("Telegram"))
+  kbd.bind(alt, "m", "Outlook", launch("Microsoft Outlook"))
+  kbd.bind(alt, "f", "Finder", launch("Finder"))
 
   -- Suggestions (uncomment as needed):
   -- kbd.bind(alt, "c", launch("Calendar"))

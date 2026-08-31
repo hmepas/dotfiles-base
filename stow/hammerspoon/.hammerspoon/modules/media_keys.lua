@@ -11,6 +11,9 @@
 local kbd = require("modules.keybind")
 local hyper = kbd.hyper
 
+kbd.setGroup("System")
+kbd.register(hyper, "F1…F12", "Media keys (brightness/volume/…)")
+
 local function postSysKey(name)
   return function()
     hs.eventtap.event.newSystemKeyEvent(name, true):post()

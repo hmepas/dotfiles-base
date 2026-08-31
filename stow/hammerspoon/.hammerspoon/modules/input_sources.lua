@@ -76,8 +76,9 @@ hs.keycodes.inputSourceChanged(function()
   rememberCurrentNonChinese()
 end)
 
-kbd.bind({ "cmd" }, "space", toggleEnglishRussianOrLeaveChinese)
-kbd.bind({ "ctrl", "cmd" }, "c", setChinese)
+kbd.setGroup("Input")
+kbd.bind({ "cmd" }, "space", "EN ⇄ RU (or leave Chinese)", toggleEnglishRussianOrLeaveChinese)
+kbd.bind({ "ctrl", "cmd" }, "c", "Chinese (Pinyin)", setChinese)
 
 M.toggleEnglishRussianOrLeaveChinese = toggleEnglishRussianOrLeaveChinese
 M.setChinese = setChinese
