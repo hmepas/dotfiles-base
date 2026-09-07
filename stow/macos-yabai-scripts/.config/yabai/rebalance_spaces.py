@@ -322,13 +322,12 @@ def main() -> None:
 
 
 def rename_only() -> None:
+    subprocess.run([str(Path.home() / ".config/yabai/top-up-spaces-hs.sh")], check=True)
     displays = query_displays()
     if len(displays) == 1:
         print("Single display configuration")
-        ensure_space_count(len(SINGLE_DISPLAY_LABELS))
     else: 
         print("Double display configuration")
-        ensure_space_count(len(DUAL_DISPLAY_LABELS))
 
 
     label_order = DUAL_DISPLAY_LABELS if len(displays) > 1 else SINGLE_DISPLAY_LABELS
