@@ -10,7 +10,8 @@ local m = hs.hotkey.modal.new()
 local modeKeys = {}
 
 -- Private per-host values, kept OUT of the repo: ~/.hammerspoon_local.lua
--- must `return { ZOOM_MEETING_URL = "https://…zoom.us/j/…?pwd=…" }`.
+-- must `return { ZOOM_MEETING_URL = "https://…zoom.us/j/…?pwd=…",
+--                STREAM_ROOM_URL = "https://stream.wb.ru/room/…" }`.
 local localCfg = {}
 do
   local p = os.getenv("HOME") .. "/.hammerspoon_local.lua"
@@ -94,11 +95,24 @@ entry("v", "Video meeting from clipboard", function()
   end
 end)
 
-entry("z", "Zoom (my meeting)", function()
+-- Also copies the link to clipboard — join, then paste it to a colleague.
+entry("z", "Zoom (my link)", function()
   local url = localCfg.ZOOM_MEETING_URL
   if not url or not openMeeting(url) then
     hs.alert.show("ZOOM_MEETING_URL missing in ~/.hammerspoon_local.lua")
+    return
   end
+  hs.pasteboard.setContents(url)
+end)
+
+-- "k" = ktalk mnemonic (s/t taken); currently points at WB Stream.
+entry("k", "WB Stream (my link)", function()
+  local url = localCfg.STREAM_ROOM_URL
+  if not url or not openMeeting(url) then
+    hs.alert.show("STREAM_ROOM_URL missing in ~/.hammerspoon_local.lua")
+    return
+  end
+  hs.pasteboard.setContents(url)
 end)
 
 table.insert(modeKeys, { key = "⎋ ⏎", desc = "cancel" })

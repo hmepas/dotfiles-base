@@ -9,7 +9,7 @@
 | `~/.hugginface_token` | HF token |
 | `~/.yc-cli-key` | Yandex Cloud CLI key |
 | `~/.claude.json` | Claude CLI config with MCP tokens |
-| `~/.hammerspoon_local.lua` | Hammerspoon private values (`ZOOM_MEETING_URL` for alt-a z) |
+| `~/.hammerspoon_local.lua` | Hammerspoon private values (`ZOOM_MEETING_URL` alt-a z, `STREAM_ROOM_URL` alt-a k) |
 
 ## getting secrets
 ```bash
