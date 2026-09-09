@@ -9,7 +9,9 @@
 | `~/.hugginface_token` | HF token |
 | `~/.yc-cli-key` | Yandex Cloud CLI key |
 | `~/.claude.json` | Claude CLI config with MCP tokens |
+| `~/.hammerspoon_local.lua` | Hammerspoon private values (`ZOOM_MEETING_URL` for alt-a z) |
 
+## getting secrets
 ```bash
 # General pattern
 umask 077
@@ -22,3 +24,12 @@ chmod 600 ~/.openai_key
 For any other 'KEY=secret'-like in the env secrets
 
 Use the `~/.zshrc.secret` file
+
+### ~/.hammerspoon_local.lua example
+
+```lua
+-- Private Hammerspoon values (not in dotfiles repo). Loaded by modules/modes/app_launch.lua.
+return {
+  ZOOM_MEETING_URL = "https://us06web.zoom.us/j/4544544848?pwd=JNkEbqT3MQ0UrmI0jsd5UMTXtMqD07.1",
+}
+

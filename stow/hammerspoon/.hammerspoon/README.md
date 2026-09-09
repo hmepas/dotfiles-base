@@ -59,3 +59,6 @@ hs -c "print(require('config').IS_YABAI, require('config').SIP_DISABLED)"
 | `modules/modes/scratchpad.lua`   | hyper-0 / hyper-1..9                     | yabai + SA |
 | `modules/modes/service.lua`      | hyper-`;` mode                           | yabai      |
 | `modules/media_keys.lua`         | hyper+Fxx → media keys (opt-in)          | non-yabai  |
+
+# Update
+`git pull + hs -c 'hs.reload()'`
