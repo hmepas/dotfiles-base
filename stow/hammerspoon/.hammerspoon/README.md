@@ -52,6 +52,7 @@ hs -c "print(require('config').IS_YABAI, require('config').SIP_DISABLED)"
 | `modules/secure_input_watch.lua` | alert while Secure Input blocks hotkeys  | both       |
 | `modules/input_sources.lua`      | cmd-space EN/RU, ctrl-cmd-c Chinese      | both       |
 | `modules/apps.lua`               | alt-o/w/g/s/r/m/f                        | both, different |
+| `modules/calendar_image.lua`     | hold alt-q / alt-a then q calendar image | both            |
 | `modules/spaces.lua`             | alt-1..9 / alt-tab / window→space        | both, different |
 | `modules/windows.lua`            | focus/swap/warp/resize/display           | both, different |
 | `modules/cheatsheet.lua`         | hyper-/ hotkey overlay + mode popups (auto-generated from keybind registry) | both |

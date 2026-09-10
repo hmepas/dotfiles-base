@@ -5,6 +5,7 @@ local cfg = require("config")
 local kbd = require("modules.keybind")
 local yab = require("modules.yabai")
 local cs  = require("modules.cheatsheet")
+local calendarImage = require("modules.calendar_image")
 
 local m = hs.hotkey.modal.new()
 local modeKeys = {}
@@ -45,6 +46,7 @@ end
 entry("w", "WhatsApp", function() hs.application.launchOrFocus("WhatsApp") end)
 entry("r", "OBS", function() hs.application.launchOrFocus("OBS") end)
 entry("c", "Calendar", function() hs.application.launchOrFocus("Calendar") end)
+entry("q", "Calendar image", calendarImage.togglePersistent)
 entry("s", "Safari (new window)", function()
   hs.osascript.applescript('tell application "Safari" to make new document')
 end)
