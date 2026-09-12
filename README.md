@@ -70,9 +70,14 @@ stow -t ~ -d stow macos-common
 
 ```bash
 brew bundle --file=packages/Brewfile.personal
+./scripts/set-iina-defaults.sh # set IINA as the default video player
 stow -t ~ -d stow macos-personal macos-yabai-scripts
 touch ~/.sip_disabled   # personal mac runs with SIP off + yabai SA loaded
 ```
+
+`set-iina-defaults.sh` changes video file associations for the current user.
+Run it manually after installing IINA and duti; it does not run at shell startup.
+It also assigns `.ts` files to IINA, including TypeScript files with that extension.
 
 `macos-personal` ships the SA-enabled `~/.yabairc`. `macos-yabai-scripts`
 provides `~/.config/yabai/` helper scripts (shared with the work mac).
