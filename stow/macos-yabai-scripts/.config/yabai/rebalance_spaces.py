@@ -126,18 +126,18 @@ def get_last_display_index() -> int:
     return last_display["index"]
     
     
-def create_temp_space():
+def create_temp_space() -> None:
     print("creating temp space")
+    count_before = len(query_spaces())
     run_yabai("space", "--create")
+    time.sleep(SPACE_MOVE_DELAY_SECONDS)
     updated_spaces = query_spaces()
+    if len(updated_spaces) <= count_before:
+        raise YabaiError("space --create did not create a space")
     new_space = max(updated_spaces, key=lambda space: space["id"])
-    temp_index = new_space["index"]
-    last_display_index = get_last_display_index()
-    run_yabai("space", str(temp_index),
-              "--display", str(last_display_index),
-              "--move", str(len(updated_spaces)),
-              "--label", TEMP_LABEL,
-              "--layout", "float")
+    move_space_to_display(new_space["index"], get_last_display_index())
+    temp_index = next(space["index"] for space in query_spaces() if space["id"] == new_space["id"])
+    run_yabai("space", str(temp_index), "--label", TEMP_LABEL, "--layout", "float")
 
 
 def destroy_temp_space() -> None:
@@ -158,7 +158,10 @@ def ensure_space_count(target_count: int) -> None:
         print("creating space")
         run_yabai("space", "--create")
     time.sleep(SPACE_MOVE_DELAY_SECONDS)
-    
+    actual_count = len(query_spaces())
+    if actual_count < target_count:
+        raise YabaiError(f"expected {target_count} spaces, got {actual_count}")
+
 
 def trim_extra_spaces(allowed_labels: Set[str]) -> None:
     spaces = query_spaces()
@@ -246,13 +249,12 @@ def assign_spaces_to_displays(temp_index: int, displays: List[dict]) -> None:
         return
 
 
-# assumtion temp_space should be last one by index
 def rename_spaces(labels: List[str]) -> None:
-    spaces = query_spaces()
+    spaces = [space for space in query_spaces() if space.get("label") != TEMP_LABEL]
     spaces.sort(key=lambda space: space["index"])
-    for i in range(len(labels)):
-        label = labels[i]
-        space = spaces[i]
+    if len(spaces) < len(labels):
+        raise YabaiError(f"not enough spaces to rename: {len(spaces)} < {len(labels)}")
+    for label, space in zip(labels, spaces):
         run_yabai("space", str(space["index"]), "--label", label)
     time.sleep(SPACE_MOVE_DELAY_SECONDS)
 
@@ -293,31 +295,31 @@ def restore_windows(snapshot: Dict[str, SpaceSnapshot]) -> None:
 def main() -> None:
     initial_spaces = query_spaces()
     snapshot = snapshot_spaces(initial_spaces)
-    
-    create_temp_space()
-
-    current_spaces = query_spaces()
-    current_temp_index = temp_space_index(current_spaces)
-    if current_temp_index is None:
-        raise YabaiError("failed to create temporary space")
-    move_all_windows_to_temp(snapshot, current_temp_index)
 
     displays = query_displays()
-    if len(displays) == 1:
-        ensure_space_count(len(SINGLE_DISPLAY_LABELS) + 1)
-    else: 
-        ensure_space_count(len(DUAL_DISPLAY_LABELS) + 1)
-
-    assign_spaces_to_displays(current_temp_index, displays)
-
     label_order = DUAL_DISPLAY_LABELS if len(displays) > 1 else SINGLE_DISPLAY_LABELS
+    # single display: 16 labels + temp would exceed macOS limit of 16 spaces per display,
+    # and nothing moves between displays anyway, so skip the temp space
+    use_temp = len(displays) > 1
+
+    ensure_space_count(len(label_order))
+
+    if use_temp:
+        create_temp_space()
+        current_temp_index = temp_space_index(query_spaces())
+        if current_temp_index is None:
+            raise YabaiError("failed to create temporary space")
+        move_all_windows_to_temp(snapshot, current_temp_index)
+        assign_spaces_to_displays(current_temp_index, displays)
+
     rename_spaces(label_order)
     
     restore_layouts(snapshot)
     restore_windows(snapshot)
     s9_layout_manage_off()
     
-    destroy_temp_space()
+    if use_temp:
+        destroy_temp_space()
     trim_extra_spaces(set(label_order))
 
 
