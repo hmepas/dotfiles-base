@@ -259,7 +259,7 @@ def main() -> None:
 
     fix_spaces_order(label_order)
 
-    subprocess.run(["osascript", "-e", 'tell application id "tracesOf.Uebersicht" to refresh'])
+    subprocess.run(["curl", "-s", "http://localhost:7776/yabai/spaces/refresh"], stdout=subprocess.DEVNULL)
     log_message("=== fix_spaces.py completed ===")
 
 
