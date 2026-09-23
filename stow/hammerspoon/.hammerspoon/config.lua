@@ -32,9 +32,7 @@ end
 M.YABAI_HELPERS = home .. "/.config/yabai"
 M.SKHD_SCRIPTS  = home .. "/.config/skhd/applescripts"
 
--- simple-bar mode indicator
-M.SIMPLE_BAR_REFRESH = "http://localhost:7776/skhd/mode/refresh"
-M.YABAI_MODE_SCRIPT  = M.YABAI_HELPERS
-  .. "/ubersicht-widgets/simple-bar/lib/scripts/yabai-set-mode-server.sh"
+-- obi mode badge file (must match mode_file in ~/.config/obi/config.toml)
+M.OBI_MODE_FILE = home .. "/Library/Caches/obi/mode"
 
 return M

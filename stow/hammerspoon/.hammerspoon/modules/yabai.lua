@@ -50,17 +50,15 @@ function M.helper(script, ...)
   task:start()
 end
 
--- simple-bar mode indicator. Two commands chained — use shell + PATH.
--- Gated by IS_YABAI_SA: Übersicht/simple-bar is personal-mac only (work host
--- doesn't install ubersicht — see Brewfile.personal).
-function M.setSimpleBarMode(name, color)
+-- obi mode badge. obi watches the file, so no HTTP ping is needed.
+-- Gated by IS_YABAI_SA: obi is personal-mac only.
+function M.setObiMode(name, color)
   if not cfg.IS_YABAI_SA then return end
-  local cmd = string.format(
-    "%s '%s' %s && curl -qs %s",
-    cfg.YABAI_MODE_SCRIPT, name, color, cfg.SIMPLE_BAR_REFRESH)
-  local task = hs.task.new("/bin/sh", nil, { "-c", cmd })
-  task:setEnvironment(pathEnv())
-  task:start()
+  hs.fs.mkdir(cfg.OBI_MODE_FILE:match("(.*)/"))
+  local f = io.open(cfg.OBI_MODE_FILE, "w")
+  if not f then return end
+  f:write(hs.json.encode({ mode = name, color = color or "white" }))
+  f:close()
 end
 
 return M

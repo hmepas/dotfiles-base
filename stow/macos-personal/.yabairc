@@ -101,7 +101,7 @@ open -a /Applications/iTerm.app/Contents/MacOS/iTerm2
 yabai -m rule --add --one-shot app="^Safari$" space=^sB label="safari_startup"
 open -a /Applications/Safari.app/Contents/MacOS/Safari
 
-~/.config/yabai/simple-bar-conf.sh
+~/.config/yabai/obi-signals.sh
 
 # End
 terminal-notifier -title "Yabai" -message "Yabai configuration loaded" -group "yabai"

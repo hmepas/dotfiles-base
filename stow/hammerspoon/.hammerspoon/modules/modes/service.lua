@@ -15,7 +15,7 @@ local MODE_KEYS = {
 
 local function enterMode()
   kbd.disableAll()
-  yab.setSimpleBarMode("service_mode", "red")
+  yab.setObiMode("service_mode", "red")
   cs.showMode("SERVICE MODE — keys disabled", MODE_KEYS, cs.accentRed)
   m:enter()
 end
@@ -23,7 +23,7 @@ end
 local function exitMode()
   m:exit()
   kbd.enableAll()
-  yab.setSimpleBarMode("", "main")
+  yab.setObiMode("", "main")
   cs.hideMode()
 end
 

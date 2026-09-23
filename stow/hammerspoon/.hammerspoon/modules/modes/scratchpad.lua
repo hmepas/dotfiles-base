@@ -31,14 +31,14 @@ local MODE_KEYS = {
 }
 
 local function enterMode()
-  yab.setSimpleBarMode("scratchpad", "red")
+  yab.setObiMode("scratchpad", "red")
   cs.showMode("SCRATCHPAD ASSIGN", MODE_KEYS)
   m:enter()
 end
 
 local function exitMode()
   m:exit()
-  yab.setSimpleBarMode("", "main")
+  yab.setObiMode("", "main")
   cs.hideMode()
 end
 

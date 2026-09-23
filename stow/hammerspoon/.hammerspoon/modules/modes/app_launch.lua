@@ -20,14 +20,14 @@ do
 end
 
 local function enterMode()
-  yab.setSimpleBarMode("app_launch", "red")
+  yab.setObiMode("app_launch", "red")
   cs.showMode("APP LAUNCH", modeKeys)
   m:enter()
 end
 
 local function exitMode()
   m:exit()
-  yab.setSimpleBarMode("", "main")
+  yab.setObiMode("", "main")
   cs.hideMode()
 end
 

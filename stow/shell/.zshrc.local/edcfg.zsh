@@ -22,7 +22,7 @@
 # Sources scanned (deduped):
 #   ~/.config/**                                 (recursive, hidden files included)
 #   top-level dotfiles: .zshrc, .zshenv, .zprofile, .bashrc, .profile,
-#                       .tmux.conf, .gitconfig, .yabairc, .simplebarrc, .wezterm.lua
+#                       .tmux.conf, .gitconfig, .yabairc, .wezterm.lua
 #   ~/.zshrc.local/**, ~/.bashrc_local/**
 #
 # Dependencies: fd, fzf, bat (all installed via Brewfile).
@@ -34,7 +34,7 @@ edcfg() {
     {
       fd -HI --type f . ~/.config 2>/dev/null
       print -l ~/.zshrc ~/.zshenv ~/.zprofile ~/.bashrc ~/.profile \
-               ~/.tmux.conf ~/.gitconfig ~/.yabairc ~/.simplebarrc ~/.wezterm.lua
+               ~/.tmux.conf ~/.gitconfig ~/.yabairc ~/.wezterm.lua
       fd -HI --type f . ~/.zshrc.local ~/.bashrc_local 2>/dev/null
     } | awk '!seen[$0]++' \
       | fzf --preview 'bat --color=always --style=plain --line-range=:200 {}' \
@@ -49,7 +49,7 @@ viewcfg() {
     {
       fd -HI --type f . ~/.config 2>/dev/null
       print -l ~/.zshrc ~/.zshenv ~/.zprofile ~/.bashrc ~/.profile \
-               ~/.tmux.conf ~/.gitconfig ~/.yabairc ~/.simplebarrc ~/.wezterm.lua
+               ~/.tmux.conf ~/.gitconfig ~/.yabairc ~/.wezterm.lua
       fd -HI --type f . ~/.zshrc.local ~/.bashrc_local 2>/dev/null
     } | awk '!seen[$0]++' \
       | fzf --preview 'bat --color=always --style=plain --line-range=:200 {}' \
