@@ -58,7 +58,9 @@ font-size = 15
 mouse-hide-while-typing = true
 window-decoration = true
 keybind = global:cmd+/=toggle_quick_terminal
-macos-option-as-alt = true
+# Option = plain macOS Option (symbols like — via shift+opt+-), as iTerm2 "Normal".
+# opt+arrows still arrive as ESC[1;3C/D and are bound in zsh keybinding.zsh.
+macos-option-as-alt = false
 background-opacity = 0.7
 background-blur-radius = 20
 
