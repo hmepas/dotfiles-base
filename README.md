@@ -59,6 +59,15 @@ Skip on headless / remote-SSH hosts.
 stow -t ~ -d stow term-gui
 ```
 
+Ghostty renders Cyrillic with a bold Hack face so latin `c` and cyrillic `с` never
+look alike (iTerm2 did this via "Non-ASCII font"). Ghostty matches fonts by family
+name only, so the bold face has to exist as its own family. Generate it once per Mac
+(needs the `font-hack-nerd-font` cask and `uv`; writes `~/Library/Fonts/HackNFMBold-Regular.ttf`):
+
+```bash
+./scripts/make-hack-nfm-bold-family.py
+```
+
 ### Any Mac
 
 ```bash

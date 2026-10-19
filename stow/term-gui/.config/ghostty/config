@@ -49,6 +49,10 @@
 # resize-overlay-duration = 4s 200ms
 
 font-family = Hack Nerd Font Mono
+# Cyrillic in bold (like iTerm2 "Non-ASCII font = Bold") so latin c and cyrillic с
+# never look the same. Ghostty matches fonts by family name only, so the bold face
+# is cloned into its own family by scripts/make-hack-nfm-bold-family.py (see README).
+font-codepoint-map = U+0400-U+04FF=Hack NFM Bold
 theme = Catppuccin Mocha
 font-size = 15
 mouse-hide-while-typing = true
