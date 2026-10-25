@@ -21,7 +21,7 @@ local function modLabel(mods)
   local set, n = {}, 0
   for _, m in ipairs(mods) do set[m] = true; n = n + 1 end
   if n == 4 then return "✦" end
-  if n == 3 and set.ctrl and set.alt and set.cmd then return "⇪" end
+  if n == 3 and set.ctrl and set.alt and set.cmd then return "●" end
   local s = ""
   for _, m in ipairs(MOD_ORDER) do
     if set[m] then s = s .. MOD_GLYPH[m] end
@@ -101,56 +101,63 @@ local function hideSheet()
   if escHotkey then escHotkey:delete(); escHotkey = nil end
 end
 
+local SCREEN_FILL = 0.9 -- sheet scales up to fill this share of the screen
+
 local function buildSheet()
   local cols, maxH = packColumns(collectGroups())
-  local w = PAD * 2 + COL_W * COLS
-  local h = PAD * 2 + maxH + LEGEND_H
+  local baseW = PAD * 2 + COL_W * COLS
+  local baseH = PAD * 2 + maxH + LEGEND_H
 
   local sf = hs.screen.mainScreen():frame()
+  local k = math.min(sf.w * SCREEN_FILL / baseW, sf.h * SCREEN_FILL / baseH)
+  local w, h = baseW * k, baseH * k
+  local pad, colW, keyW = PAD * k, COL_W * k, KEY_W * k
+  local rowH, headerH, gap = ROW_H * k, HEADER_H * k, GROUP_GAP * k
+
   local c = hs.canvas.new(hs.geometry.rect(
     sf.x + (sf.w - w) / 2, sf.y + (sf.h - h) / 2, w, h))
 
   c:appendElements({
     type = "rectangle", action = "fill",
-    roundedRectRadii = { xRadius = 14, yRadius = 14 },
+    roundedRectRadii = { xRadius = 14 * k, yRadius = 14 * k },
     fillColor = COLORS.bg,
   })
 
   for ci, col in ipairs(cols) do
-    local x = PAD + (ci - 1) * COL_W
-    local y = PAD
+    local x = pad + (ci - 1) * colW
+    local y = pad
     for _, g in ipairs(col) do
       c:appendElements({
         type = "text", text = g.name:upper(),
-        textFont = ".AppleSystemUIFontBold", textSize = 13,
+        textFont = ".AppleSystemUIFontBold", textSize = 13 * k,
         textColor = COLORS.header,
-        frame = { x = x, y = y + 8, w = COL_W - 16, h = HEADER_H - 8 },
+        frame = { x = x, y = y + 8 * k, w = colW - 16 * k, h = headerH - 8 * k },
       })
-      y = y + HEADER_H
+      y = y + headerH
       for _, e in ipairs(g.entries) do
         c:appendElements({
           type = "text", text = modLabel(e.mods) .. " " .. keyLabel(e.key),
-          textFont = "Menlo", textSize = 12.5,
+          textFont = "Menlo", textSize = 12.5 * k,
           textColor = COLORS.key,
-          frame = { x = x, y = y, w = KEY_W, h = ROW_H },
+          frame = { x = x, y = y, w = keyW, h = rowH },
         }, {
           type = "text", text = e.desc,
-          textFont = ".AppleSystemUIFont", textSize = 12.5,
+          textFont = ".AppleSystemUIFont", textSize = 12.5 * k,
           textColor = COLORS.desc,
-          frame = { x = x + KEY_W + 8, y = y, w = COL_W - KEY_W - 24, h = ROW_H },
+          frame = { x = x + keyW + 8 * k, y = y, w = colW - keyW - 24 * k, h = rowH },
         })
-        y = y + ROW_H
+        y = y + rowH
       end
-      y = y + GROUP_GAP
+      y = y + gap
     end
   end
 
   c:appendElements({
     type = "text",
-    text = "✦ hyper (⌃⌥⇧⌘)   ⇪ super (CapsLock, ⌘⌥⌃)   (SA) personal mac only   ⎋ / click / same chord to close",
-    textFont = ".AppleSystemUIFont", textSize = 11.5,
+    text = "✦ hyper (⌃⌥⇧⌘)   ● super (CapsLock, ⌘⌥⌃)   (SA) personal mac only   ⎋ / click / same chord to close",
+    textFont = ".AppleSystemUIFont", textSize = 11.5 * k,
     textColor = COLORS.dim, textAlignment = "center",
-    frame = { x = 0, y = h - LEGEND_H, w = w, h = ROW_H },
+    frame = { x = 0, y = h - LEGEND_H * k, w = w, h = rowH },
   })
 
   c:level(hs.canvas.windowLevels.overlay)
