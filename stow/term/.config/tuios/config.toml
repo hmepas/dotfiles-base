@@ -132,31 +132,87 @@ leader_key = "ctrl+a"
 preset = "tmux"
 
 [spotlight]
+# Toggle later: Ctrl-A, Shift-B.
 enabled = false
 
+# Keep macOS/Hammerspoon shortcuts outside tuios; use the prefix bindings.
+# Below: commas mean sequential keystrokes; '+' means held together.
+# Prefix = Ctrl-A. Uppercase letters require Shift. Palette = Ctrl-A, :.
 [keybindings.global]
-command_palette = []
+command_palette = [] # Instead: Ctrl-A, : (or Ctrl-A, Shift-P).
+launcher = [] # Instead: Ctrl-A, a.
 
 [keybindings.inbox]
-inbox_up = ["k", "up"]
+inbox_up = ["k", "up"] # Ctrl-P removed; use k or Up in the Inbox.
 
 [keybindings.lists]
-list_up = ["up", "k"]
+list_up = ["up", "k"] # Ctrl-P removed; use Up or k in lists.
 
 [keybindings.mail]
-mail_up = ["k", "up"]
+mail_up = ["k", "up"] # Ctrl-P removed; use k or Up in the mailbox.
 
 [keybindings.script]
-script_pause = []
+script_pause = [] # No remaining direct key; palette: "Pause or resume the playing tape".
 
 [keybindings.gui]
-terminal_focus_left = []
-terminal_focus_right = []
+# Focus panes with Opt-Shift-arrows; plain Opt-Left/Right stay with the shell.
+terminal_focus_left = ["alt+shift+left"] # Also: Ctrl-A, Left.
+terminal_focus_right = ["alt+shift+right"] # Also: Ctrl-A, Right.
+terminal_focus_up = ["alt+shift+up"] # Also: Ctrl-A, Up.
+terminal_focus_down = ["alt+shift+down"] # Also: Ctrl-A, Down.
+# Free GUI resize shortcuts for focus; prefix resize remains available.
+gui_resize_left = [] # Instead: Ctrl-A, Ctrl-Left (resize by 5 columns).
+gui_resize_right = [] # Instead: Ctrl-A, Ctrl-Right (resize by 5 columns).
+gui_resize_up = [] # Instead: Ctrl-A, Ctrl-Up (resize by 5 rows).
+gui_resize_down = [] # Instead: Ctrl-A, Ctrl-Down (resize by 5 rows).
+switch_workspace_1 = [] # Instead: Ctrl-A, 1.
+switch_workspace_2 = [] # Instead: Ctrl-A, 2.
+switch_workspace_3 = [] # Instead: Ctrl-A, 3.
+switch_workspace_4 = [] # Instead: Ctrl-A, 4.
+switch_workspace_5 = [] # Instead: Ctrl-A, 5.
+switch_workspace_6 = [] # Instead: Ctrl-A, 6.
+switch_workspace_7 = [] # Instead: Ctrl-A, 7.
+switch_workspace_8 = [] # Instead: Ctrl-A, 8.
+switch_workspace_9 = [] # Instead: Ctrl-A, 9.
 
 [keybindings.prefix_mode]
+# Alt-Left/Right removed; resize via Ctrl-A, Ctrl-Left/Right (or Shift-Left/Right).
 resize_pane_left_5 = ["ctrl+left", "shift+left"]
 resize_pane_right_5 = ["ctrl+right", "shift+right"]
 
 [keybindings.terminal_mode]
-terminal_focus_left = []
-terminal_focus_right = []
+# Focus panes with Opt-Shift-arrows; unmodified Opt-arrows are forwarded.
+terminal_focus_left = ["alt+shift+left"] # Also: Ctrl-A, Left.
+terminal_focus_right = ["alt+shift+right"] # Also: Ctrl-A, Right.
+terminal_focus_up = ["alt+shift+up"] # Also: Ctrl-A, Up.
+terminal_focus_down = ["alt+shift+down"] # Also: Ctrl-A, Down.
+terminal_next_window = [] # Instead: Ctrl-A, o.
+terminal_prev_window = [] # Instead: Ctrl-A, Ctrl-T, p.
+
+[keybindings.window_management]
+next_agent = [] # Instead: Ctrl-A, Shift-J.
+prev_agent = [] # Instead: Ctrl-A, Shift-K.
+next_session = [] # Instead: Ctrl-A, ).
+prev_session = [] # Instead: Ctrl-A, (.
+
+[keybindings.workspaces]
+switch_workspace_1 = [] # Instead: Ctrl-A, 1.
+switch_workspace_2 = [] # Instead: Ctrl-A, 2.
+switch_workspace_3 = [] # Instead: Ctrl-A, 3.
+switch_workspace_4 = [] # Instead: Ctrl-A, 4.
+switch_workspace_5 = [] # Instead: Ctrl-A, 5.
+switch_workspace_6 = [] # Instead: Ctrl-A, 6.
+switch_workspace_7 = [] # Instead: Ctrl-A, 7.
+switch_workspace_8 = [] # Instead: Ctrl-A, 8.
+switch_workspace_9 = [] # Instead: Ctrl-A, 9.
+# tmux preset: workspace prefix is Ctrl-A, Ctrl-T, w (Ctrl-A, w is the switcher).
+# Move via workspace prefix, then explicitly switch there to follow.
+move_and_follow_1 = [] # Instead: Ctrl-A, Ctrl-T, w, !; then Ctrl-A, 1.
+move_and_follow_2 = [] # Instead: Ctrl-A, Ctrl-T, w, @; then Ctrl-A, 2.
+move_and_follow_3 = [] # Instead: Ctrl-A, Ctrl-T, w, #; then Ctrl-A, 3.
+move_and_follow_4 = [] # Instead: Ctrl-A, Ctrl-T, w, $; then Ctrl-A, 4.
+move_and_follow_5 = [] # Instead: Ctrl-A, Ctrl-T, w, %; then Ctrl-A, 5.
+move_and_follow_6 = [] # Instead: Ctrl-A, Ctrl-T, w, ^; then Ctrl-A, 6.
+move_and_follow_7 = [] # Instead: Ctrl-A, Ctrl-T, w, &; then Ctrl-A, 7.
+move_and_follow_8 = [] # Instead: Ctrl-A, Ctrl-T, w, *; then Ctrl-A, 8.
+move_and_follow_9 = [] # Instead: Ctrl-A, Ctrl-T, w, (; then Ctrl-A, 9.
