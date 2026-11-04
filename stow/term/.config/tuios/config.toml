@@ -133,3 +133,30 @@ preset = "tmux"
 
 [spotlight]
 enabled = false
+
+[keybindings.global]
+command_palette = []
+
+[keybindings.inbox]
+inbox_up = ["k", "up"]
+
+[keybindings.lists]
+list_up = ["up", "k"]
+
+[keybindings.mail]
+mail_up = ["k", "up"]
+
+[keybindings.script]
+script_pause = []
+
+[keybindings.gui]
+terminal_focus_left = []
+terminal_focus_right = []
+
+[keybindings.prefix_mode]
+resize_pane_left_5 = ["ctrl+left", "shift+left"]
+resize_pane_right_5 = ["ctrl+right", "shift+right"]
+
+[keybindings.terminal_mode]
+terminal_focus_left = []
+terminal_focus_right = []
