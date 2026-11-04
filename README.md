@@ -157,7 +157,7 @@ stow -n -v -t ~ -d stow shell   # dry-run, shows what will be symlinked
 | `packages/Brewfile.work` | Work Mac |
 | `packages/arch/` | Arch Linux — pacman + paru |
 | `stow/shell/` | `.zshrc`, `.profile`, common zsh modules |
-| `stow/term/` | `.tmux.conf`, `starship.toml` |
+| `stow/term/` | `.tmux.conf`, `starship.toml`, `tuios/config.toml` |
 | `stow/term-gui/` | Cross-platform GUI terminals (WezTerm, Ghostty) — any Mac or Linux desktop |
 | `stow/git/` | `.gitconfig`, global `git/ignore` |
 | `stow/bin/` | cross-platform scripts |
