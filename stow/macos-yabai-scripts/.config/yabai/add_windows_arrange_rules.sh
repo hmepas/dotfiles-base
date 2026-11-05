@@ -11,6 +11,7 @@ yabai -m rule --add app="^Microsoft Outlook$" title="^Calendar$" space=^sC label
 # Messengers teleGram
 yabai -m rule --add app="^Telegram$" space=^sG label="telegram_placement"
 yabai -m rule --add app="WhatsApp$" space=^sG label="whatsapp_placement"
+yabai -m rule --add app="^Mattermost$" space=^sG label="mattermost_placement"
 
 # Some minor apps on 9th space, always unmanaged
 yabai -m rule --add app="^Yandex Music$" space=^s9 label="yamusic_placement"
