@@ -68,4 +68,4 @@ clipboard-trim-trailing-spaces = true
 clipboard-paste-protection = true
 copy-on-select = clipboard
 
-macos-titlebar-style = tabs
+macos-titlebar-style = hidden
