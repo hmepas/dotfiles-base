@@ -21,21 +21,42 @@ if cfg.IS_YABAI then
   end)
 
   -- AppleScript: menu picker
-  -- Peek at the auto-hidden menu bar: park the pointer on the top edge (the bar
-  -- stays down while it is there); press again to send the pointer back.
-  local peekReturn
-  kbd.bind(kbd.alt, "i", "Peek menu bar", function()
-    local moved = hs.eventtap.event.types.mouseMoved
-    local pos = hs.mouse.absolutePosition()
+  -- Since macOS 27.2 an AX click no longer slides the auto-hidden menu bar down;
+  -- the pointer on the top edge still does. Two alt-i variants, pick one below.
+  local moved = hs.eventtap.event.types.mouseMoved
+  local function movePointer(p) hs.eventtap.event.newMouseEvent(moved, p):post() end
+  local function topEdge()
     local f = hs.screen.mainScreen():fullFrame()
-    if peekReturn and pos.y <= f.y + 1 then
-      hs.eventtap.event.newMouseEvent(moved, peekReturn):post()
+    return { x = f.x + 200, y = f.y }
+  end
+
+  -- Reveal the bar, open the first menu, put the pointer back.
+  local function menuPicker()
+    local pos = hs.mouse.absolutePosition()
+    movePointer(topEdge())
+    hs.timer.doAfter(0.3, function()
+      hs.task.new("/usr/bin/osascript", function() movePointer(pos) end,
+        { cfg.SKHD_SCRIPTS .. "/menu.scpt" }):start()
+    end)
+  end
+
+  -- Reveal the bar only: park the pointer on the top edge (the bar stays down
+  -- while it is there); press again to send the pointer back.
+  local peekReturn
+  local function menuBarPeek()
+    local pos = hs.mouse.absolutePosition()
+    local top = topEdge()
+    if peekReturn and pos.y <= top.y + 1 then
+      movePointer(peekReturn)
       peekReturn = nil
     else
       peekReturn = pos
-      hs.eventtap.event.newMouseEvent(moved, { x = f.x + 200, y = f.y }):post()
+      movePointer(top)
     end
-  end)
+  end
+
+  -- Switch variant here: menuPicker | menuBarPeek
+  kbd.bind(kbd.alt, "i", "Menu picker", menuPicker)
 
   -- AppleScript: toggle menu autohide
   kbd.bind({ "shift", "alt" }, "i", "Toggle menu autohide", function()
