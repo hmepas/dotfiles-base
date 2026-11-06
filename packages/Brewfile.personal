@@ -10,7 +10,6 @@ tap "anomalyco/tap"
 tap "daipeihust/tap"
 tap "felixkratz/formulae"
 tap "hmepas/throt"
-tap "koekeishiya/formulae"
 #tap "minio/stable"
 tap "oven-sh/bun"
 
@@ -23,7 +22,13 @@ brew "anomalyco/tap/opencode"
 # ===== Window manager (SIP-disabled host) =====
 # yabai + JankyBorders + Übersicht referenced from stow/macos-personal/.yabairc
 # and stow/macos-yabai-scripts. SA features need SIP off — personal mac only.
-brew "koekeishiya/formulae/yabai"
+# yabai is NOT installed via brew: upstream (asmvik/yabai) has no macOS 27
+# support, so it is built from the AhsanFazal/yabai fork:
+#   git clone https://github.com/AhsanFazal/yabai ~/projects/yabai-ahsanfazal
+#   cd ~/projects/yabai-ahsanfazal && make install
+#   codesign -fs yabai-cert-20261106 bin/yabai   # self-signed cert in login keychain
+#   cp bin/yabai /opt/homebrew/bin/yabai
+#   sudo yabai --load-sa && yabai --start-service
 brew "felixkratz/formulae/borders"
 cask "ubersicht"
 

@@ -26,7 +26,6 @@ If `IS_YABAI` is false, all yabai modules (`yabai.lua`, `scratchpad`, `service`,
 
 If `IS_YABAI` is true but `SIP_DISABLED` is false, SA-only bindings are skipped:
 - `hyper-s` window --toggle sticky
-- `alt+shift-tab` space --move next
 - `hyper-0..9` scratchpad mode (whole module not loaded)
 
 # Setup

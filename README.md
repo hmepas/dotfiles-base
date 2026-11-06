@@ -91,7 +91,7 @@ It also assigns `.ts` files to IINA, including TypeScript files with that extens
 `macos-personal` ships the SA-enabled `~/.yabairc`. `macos-yabai-scripts`
 provides `~/.config/yabai/` helper scripts (shared with the work mac).
 `~/.sip_disabled` tells Hammerspoon to enable SA-only bindings (sticky,
-scratchpads, `space --move`).
+scratchpads).
 
 `macos-personal` also ships `~/Library/LaunchAgents/com.hmepas.simple-bar-server.plist`
 (simple-bar-server for the Übersicht simple-bar widget; expects a clone at

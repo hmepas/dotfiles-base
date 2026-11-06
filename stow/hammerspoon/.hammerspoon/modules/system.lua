@@ -21,9 +21,20 @@ if cfg.IS_YABAI then
   end)
 
   -- AppleScript: menu picker
-  kbd.bind(kbd.alt, "i", "Menu picker", function()
-    hs.task.new("/usr/bin/osascript", nil,
-      { cfg.SKHD_SCRIPTS .. "/menu.scpt" }):start()
+  -- Peek at the auto-hidden menu bar: park the pointer on the top edge (the bar
+  -- stays down while it is there); press again to send the pointer back.
+  local peekReturn
+  kbd.bind(kbd.alt, "i", "Peek menu bar", function()
+    local moved = hs.eventtap.event.types.mouseMoved
+    local pos = hs.mouse.absolutePosition()
+    local f = hs.screen.mainScreen():fullFrame()
+    if peekReturn and pos.y <= f.y + 1 then
+      hs.eventtap.event.newMouseEvent(moved, peekReturn):post()
+      peekReturn = nil
+    else
+      peekReturn = pos
+      hs.eventtap.event.newMouseEvent(moved, { x = f.x + 200, y = f.y }):post()
+    end
   end)
 
   -- AppleScript: toggle menu autohide

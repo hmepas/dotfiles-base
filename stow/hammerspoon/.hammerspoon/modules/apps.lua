@@ -16,11 +16,39 @@ local function launch(app)
   return function() hs.application.launchOrFocus(app) end
 end
 
+-- Bitwarden: launchOrFocus sends a reopen event, on which Bitwarden
+-- re-applies its saved window bounds. Those go stale while yabai keeps the
+-- window tiled, so the window jumps to another display. Focus the existing
+-- window via yabai instead; launchOrFocus only when there is no window.
+-- SA host only: needs `space --focus`, since `window --focus` alone
+-- activates the app without switching to the window's space.
+local function focusBitwarden()
+  -- by bundle ID: hs.application.get(name) falls back to window-title matches
+  local app = hs.application.applicationsForBundleID("com.bitwarden.desktop")[1]
+  local win = app and app:mainWindow()
+  if not (cfg.IS_YABAI_SA and win) then
+    hs.application.launchOrFocus("Bitwarden")
+    return
+  end
+  local id = tostring(win:id())
+  hs.task.new(cfg.YABAI_BIN, function(code, out)
+    local info = code == 0 and hs.json.decode(out)
+    if not info then
+      hs.application.launchOrFocus("Bitwarden")
+      return
+    end
+    -- space --focus fails when already there; focus the window either way
+    hs.task.new(cfg.YABAI_BIN, function()
+      yab.cmd({ "window", "--focus", id })
+    end, { "-m", "space", "--focus", tostring(info.space) }):start()
+  end, { "-m", "query", "--windows", "--window", id }):start()
+end
+
 kbd.setGroup("Apps")
 
 -- Common: same on both hosts
 kbd.bind(alt, "o", "Obsidian", launch("Obsidian"))
-kbd.bind(alt, "w", "Bitwarden", launch("Bitwarden"))
+kbd.bind(alt, "w", "Bitwarden", focusBitwarden)
 kbd.bind(alt, "s", "Safari", launch("Safari"))
 
 -- alt - r: Obsidian DAR + ctrl+d (today's daily note shortcut).

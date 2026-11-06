@@ -14,7 +14,7 @@ local home = os.getenv("HOME")
 M.IS_YABAI = hs.fs.attributes(home .. "/.yabairc") ~= nil
 
 -- SIP_DISABLED gates scripting-addition-requiring features (sticky,
--- scratchpads, space --move, sub-layer, opacity, shadow). Programma
+-- scratchpads, sub-layer, opacity, shadow). Programma
 -- minimum marker file: `touch ~/.sip_disabled` on a host where SIP
 -- is actually off and yabai SA is loaded.
 M.SIP_DISABLED = hs.fs.attributes(home .. "/.sip_disabled") ~= nil

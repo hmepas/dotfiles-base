@@ -3,9 +3,6 @@
 -- yabai mac: named spaces (s1..s9, sC, sV, sB, sM, sT, sG, sP).
 -- non-yabai mac: native macOS spaces only (cmd+ctrl+arrow). Window
 -- move uses hs.spaces (private API, brittle but usable).
---
--- SA-only bindings (skipped on yabai + SIP-enabled host):
---   alt+shift-tab   space --move next (move whole space to next display)
 
 local cfg  = require("config")
 local kbd  = require("modules.keybind")
@@ -47,13 +44,6 @@ if cfg.IS_YABAI then
   kbd.bind(alt, "`", "Focus recent display", function()
     yab.cmd({ "display", "--focus", "recent" })
   end)
-
-  -- alt + shift - tab: move space to next display (SA-only)
-  if cfg.SIP_DISABLED then
-    kbd.bind(alt_shift, "tab", "Move space to next display (SA)", function()
-      yab.cmd({ "space", "--move", "next" })
-    end)
-  end
 
   -- alt + shift - 1..9: move window to space sN
   kbd.register(alt_shift, "1…9", "Move window to space 1–9")
