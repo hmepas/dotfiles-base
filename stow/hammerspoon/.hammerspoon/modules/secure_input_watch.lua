@@ -16,10 +16,23 @@ local M = {}
 local INTERVAL = 5           -- seconds between checks
 local GRACE_TICKS = 2        -- ignore short legit password entry
 local ALERT_DURATION = INTERVAL - 0.5
+local ALERT_STYLE = { atScreenEdge = 2 } -- bottom edge: center covers password dialogs
+local ALERT_RAISE_HEIGHTS = 2 -- lift off the edge, in alert heights
 
 local onTicks = 0
 local hint = nil
 local alertId = nil
+
+-- hs.alert has no edge offset, so nudge its drawings (private field) after show.
+local function showRaised(text, duration)
+  local id = hs.alert.show(text, ALERT_STYLE, duration)
+  local alert = hs.alert._visibleAlerts[#hs.alert._visibleAlerts]
+  for _, d in ipairs(alert.drawings) do
+    local f = d:frame()
+    d:setTopLeft({ x = f.x, y = f.y - ALERT_RAISE_HEIGHTS * alert.frame.h })
+  end
+  return id
+end
 
 local function culpritHint()
   local out = hs.execute("/usr/sbin/ioreg -d1 -k IOConsoleUsers")
@@ -43,7 +56,7 @@ local function tick()
     end
     if onTicks >= GRACE_TICKS then
       if alertId then hs.alert.closeSpecific(alertId) end
-      alertId = hs.alert.show(
+      alertId = showRaised(
         string.format("⚠️ Secure Input ON %ds — hotkeys blocked\nfrontmost when enabled: %s",
           onTicks * INTERVAL, hint),
         ALERT_DURATION)
@@ -51,7 +64,7 @@ local function tick()
   elseif onTicks > 0 then
     if onTicks >= GRACE_TICKS then
       if alertId then hs.alert.closeSpecific(alertId) end
-      hs.alert.show("Secure Input released", 2)
+      showRaised("Secure Input released", 2)
     end
     print("secure_input_watch: OFF after " .. onTicks * INTERVAL .. "s")
     onTicks, hint, alertId = 0, nil, nil
