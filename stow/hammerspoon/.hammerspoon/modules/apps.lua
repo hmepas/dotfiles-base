@@ -87,5 +87,5 @@ else
   -- kbd.bind(alt, "c", launch("Calendar"))
   -- kbd.bind(alt, "v", launch("Visual Studio Code"))
   -- kbd.bind(alt, "b", launch("Bear"))
-  -- kbd.bind(alt, "t", launch("iTerm"))
+  -- kbd.bind(alt, "t", launch("Ghostty"))
 end

@@ -16,7 +16,7 @@ Scripts referenced from `.yabairc` and Hammerspoon `modules/yabai.lua`:
 - `center_unmanaged_window.sh`
 - `smart-resize.sh`
 - `finder-toggle.sh`
-- `new-iterm-window.sh`
+- `new-ghostty-window.sh`
 - `rebalance_spaces.py` — internal helper, called from `if_startup_then_rebalance.sh`
 - `fix_spaces.py` — internal helper, called from `on_display_layout_change.sh`
 

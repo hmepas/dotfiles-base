@@ -57,11 +57,11 @@ entry("m", "Yandex Music", function()
     { "-a", "/Applications/Яндекс Музыка.app/Contents/MacOS/Яндекс Музыка" }):start()
 end)
 
--- Terminal: yabai mac uses helper for placement; non-yabai opens iTerm directly.
+-- Terminal: yabai mac uses helper for placement; non-yabai opens Ghostty directly.
 if cfg.IS_YABAI then
-  entry("t", "iTerm (new window)", function() yab.helper("new-iterm-window.sh") end)
+  entry("t", "Ghostty (new window)", function() yab.helper("new-ghostty-window.sh") end)
 else
-  entry("t", "iTerm", function() hs.application.launchOrFocus("iTerm") end)
+  entry("t", "Ghostty", function() hs.application.launchOrFocus("Ghostty") end)
 end
 
 -- Meetings: focus sV (no-op without yabai), then open the link.

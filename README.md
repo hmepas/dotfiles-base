@@ -161,7 +161,7 @@ stow -n -v -t ~ -d stow shell   # dry-run, shows what will be symlinked
 | `stow/term-gui/` | Cross-platform GUI terminals (WezTerm, Ghostty) — any Mac or Linux desktop |
 | `stow/git/` | `.gitconfig`, global `git/ignore` |
 | `stow/bin/` | cross-platform scripts |
-| `stow/macos-common/` | Any Mac: iTerm2 integration, macfeh, pgcli, neovide, mac-only bin scripts |
+| `stow/macos-common/` | Any Mac: macfeh, pgcli, neovide, mac-only bin scripts |
 | `stow/macos-personal/` | Personal Mac: SA-enabled `.yabairc`, yc, gemini, ass aliases |
 | `stow/macos-work/` | Work Mac: no-SA `.yabairc` (SIP-safe variant) |
 | `stow/macos-yabai-scripts/` | Yabai helper scripts → `~/.config/yabai/`. Stow on any yabai mac (personal + work) |

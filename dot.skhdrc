@@ -123,7 +123,7 @@ ctrl + alt + cmd - 0x1B: ~/.config/yabai/smart-resize.sh grow 50 uncle
 
 
 # Applications shortcuts
-#alt - t : open -a /Applications/iTerm.app/Contents/MacOS/iTerm2
+#alt - t : open -a /Applications/Ghostty.app
 alt - o : open -a /Applications/Obsidian.app/Contents/MacOS/Obsidian
 alt - w : open -a /Applications/Bitwarden.app/Contents/MacOS/Bitwarden # passWords
 alt - g : open -a /Applications/Telegram.app/Contents/MacOS/Telegram && yabai -m space --focus sG
@@ -175,7 +175,7 @@ app_launch < w : open -a /Applications/WhatsApp.app/Contents/MacOS/WhatsApp ; sk
 app_launch < r : open -a /Applications/OBS.app/Contents/MacOS/OBS ; skhd -k escape
 app_launch < m : open -a "/Applications/Яндекс Музыка.app/Contents/MacOS/Яндекс Музыка"; skhd -k escape
 app_launch < c : open -a Calendar; skhd -k escape
-app_launch < t : ~/.config/yabai/new-iterm-window.sh ; skhd -k escape
+app_launch < t : ~/.config/yabai/new-ghostty-window.sh ; skhd -k escape
 app_launch < s : osascript -e 'tell application "Safari" to make new document' ; skhd -k escape
 #app_launch < n : open "obsidian://open?vault=zk&file=Notes/DAR 2025 sabbatical.md"; skhd -k escape ; sleep 0.5 ; skhd -k 'ctrl - d' # daily activity report always by hand
 app_launch < return  ; default

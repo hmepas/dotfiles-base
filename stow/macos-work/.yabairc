@@ -98,10 +98,10 @@ yabai -m signal --add event=display_removed action="throt --delay 5 ~/.config/ya
 
 # Приложения-спейсы. Когда приложения по дефолту открывается в определенном спейсе,
 # но потом его окна можно окрыть где угоднo
-# Правило для iTerm (только при старте)
-yabai -m rule --add --one-shot app="^iTerm2$" space=sT label="iterm_startup"
+# Правило для Ghostty (только при старте)
+yabai -m rule --add --one-shot app="^Ghostty$" space=sT label="ghostty_startup"
 # always one term on, and on space sT, so we could spawn others inplace, but this one always there
-open -a /Applications/iTerm.app/Contents/MacOS/iTerm2
+open -a /Applications/Ghostty.app
 
 # Правило для Safari (только при старте)
 yabai -m rule --add --one-shot app="^Safari$" space=^sB label="safari_startup"
