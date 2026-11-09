@@ -69,3 +69,7 @@ clipboard-paste-protection = true
 copy-on-select = clipboard
 
 macos-titlebar-style = hidden
+
+# otherwise it breaks tuios, since ctrl-a is a prefix there
+keybind = super+left=esc:OH
+keybind = super+right=esc:OF
