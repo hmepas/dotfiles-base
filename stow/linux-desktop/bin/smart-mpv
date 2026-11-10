@@ -1,0 +1,343 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+    cat <<'EOF'
+Usage:
+  ./smart-mpv [-s en|ru|none] [--debug] FILE [MPV_OPTIONS...]
+
+Options:
+  -s, --subs LANG   Subtitle language: en (default), ru, or none
+      --en           English subtitles
+      --ru           Russian full-dialogue subtitles
+      --no-subs      Disable subtitles
+      --debug        Print track scores chosen by the heuristics
+  -h, --help        Show this help
+
+Examples:
+  ./smart-mpv episode.mkv
+  ./smart-mpv -s ru episode.mkv
+  ./smart-mpv --no-subs episode.mkv --fs
+  ./smart-mpv -s ru ./*.mkv
+
+The original audio is selected automatically. Forced/signs-only subtitles,
+SDH/CC, commentary, and audio-description tracks are deprioritized.
+EOF
+}
+
+normalize_subs() {
+    case "${1,,}" in
+        en|eng|english) printf 'en' ;;
+        ru|rus|russian|рус|русский) printf 'ru' ;;
+        none|no|off|false|0) printf 'none' ;;
+        *)
+            printf 'smart-mpv: unsupported subtitle language: %s\n' "$1" >&2
+            printf 'Expected en, ru, or none.\n' >&2
+            exit 2
+            ;;
+    esac
+}
+
+subs=en
+debug=0
+mpv_args=()
+
+while (($#)); do
+    case "$1" in
+        -s|--subs)
+            (($# >= 2)) || { echo "smart-mpv: $1 requires a value" >&2; exit 2; }
+            subs=$(normalize_subs "$2")
+            shift 2
+            ;;
+        --subs=*)
+            subs=$(normalize_subs "${1#*=}")
+            shift
+            ;;
+        --en)
+            subs=en
+            shift
+            ;;
+        --ru)
+            subs=ru
+            shift
+            ;;
+        --no-subs)
+            subs=none
+            shift
+            ;;
+        --debug)
+            debug=1
+            shift
+            ;;
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        --)
+            mpv_args+=("--")
+            shift
+            while (($#)); do
+                mpv_args+=("$1")
+                shift
+            done
+            ;;
+        *)
+            mpv_args+=("$1")
+            shift
+            ;;
+    esac
+done
+
+((${#mpv_args[@]})) || { usage >&2; exit 2; }
+command -v mpv >/dev/null 2>&1 || { echo 'smart-mpv: mpv not found' >&2; exit 127; }
+
+lua_script=$(mktemp "${TMPDIR:-/tmp}/smart-mpv.XXXXXXXX.lua")
+trap 'rm -f "$lua_script"' EXIT HUP INT TERM
+
+cat >"$lua_script" <<'LUA'
+local mp = require 'mp'
+
+local wanted_subs = os.getenv('SMART_MPV_SUBS') or 'en'
+local debug = os.getenv('SMART_MPV_DEBUG') == '1'
+
+local function lower(value)
+    return string.lower(tostring(value or ''))
+end
+
+local function contains_any(text, words)
+    for _, word in ipairs(words) do
+        if string.find(text, word, 1, true) then
+            return true
+        end
+    end
+    return false
+end
+
+local function language(value)
+    local lang = lower(value):gsub('_', '-')
+    lang = lang:match('^[^-]+') or lang
+    if lang == 'eng' or lang == 'english' then return 'en' end
+    if lang == 'rus' or lang == 'russian' then return 'ru' end
+    if lang == 'und' or lang == 'unknown' then return '' end
+    return lang
+end
+
+local function title_of(track)
+    return tostring(track.title or '')
+end
+
+local function metadata_number(track, key)
+    local metadata = track.metadata or {}
+    return tonumber(metadata[key] or metadata[string.lower(key)] or 0) or 0
+end
+
+local function track_label(track)
+    local lang = language(track.lang)
+    local title = title_of(track)
+    local bits = { '#' .. tostring(track.id) }
+    if lang ~= '' then table.insert(bits, lang) end
+    if title ~= '' then table.insert(bits, '“' .. title .. '”') end
+    return table.concat(bits, ' ')
+end
+
+local function audio_score(track)
+    local raw_title = title_of(track)
+    local title = lower(raw_title)
+    local lang = language(track.lang)
+    local score = 0
+
+    local says_original = track.original == true or contains_any(title, {
+        'original', 'originale', 'orig.', 'оригинал'
+    }) or contains_any(raw_title, {'Оригинал', 'ОРИГИНАЛ'})
+
+    local commentary = contains_any(title, {
+        'commentary', 'comment', 'director', 'комментар', 'isolated score',
+        'music only', 'descriptive', 'description', 'audio description',
+        'ad track', 'тифлокоммент'
+    }) or track.visual_impaired == true
+
+    local translated = contains_any(title, {
+        'dub', 'dubbed', 'dubbing', 'mvo', 'dvo', 'avo', 'vo [',
+        'voice-over', 'voice over', 'translation', 'перевод', 'дубляж',
+        'озвучка'
+    }) or contains_any(raw_title, {'Перевод', 'Дубляж', 'Озвучка'})
+
+    if says_original then score = score + 100000 end
+    if commentary then score = score - 100000 end
+    if translated and not says_original then score = score - 20000 end
+
+    -- English is the best fallback when the container does not mark "original".
+    -- Other non-Russian languages still beat obvious Russian voice-overs.
+    if lang == 'en' then
+        score = score + 1000
+    elseif lang == 'ru' then
+        score = score - 200
+    elseif lang == '' then
+        score = score + 100
+    else
+        score = score + 700
+    end
+
+    if track.default == true then score = score + 5 end
+    score = score + (tonumber(track['demux-channel-count']) or tonumber(track['audio-channels']) or 0) * 2
+    score = score + math.min(metadata_number(track, 'BPS') / 1000000, 10)
+    return score
+end
+
+local forced_words = {
+    'forced', 'force only', 'signs only', 'sign only', 'signs & songs',
+    'signs and songs', 'foreign parts', 'foreign only', 'songs only',
+    'partial', 'narrative', 'форс', 'надпис', 'только надписи', 'песни'
+}
+
+local full_words = {
+    'full', 'complete', 'dialog', 'dialogue', 'regular', 'translation',
+    'полные', 'полный', 'диалоги', 'перевод'
+}
+
+local function subtitle_info(track, duration)
+    local raw_title = title_of(track)
+    local title = lower(raw_title)
+    local frames = metadata_number(track, 'NUMBER_OF_FRAMES')
+    local minutes = duration > 0 and duration / 60 or 0
+
+    local explicit_forced = track.forced == true
+        or contains_any(title, forced_words)
+        or title == 'signs' or title == 'songs'
+        or contains_any(raw_title, {'Форс', 'Надпис', 'Песни'})
+
+    -- Full dialogue subtitles normally contain far more than 2.5 events/minute.
+    -- Only use this rule when the muxer supplied an event count.
+    local sparse = frames > 0 and minutes >= 15
+        and frames < math.max(60, minutes * 2.5)
+
+    local impaired = track.hearing_impaired == true
+        or contains_any(title, {'sdh', 'closed captions', 'closed caption', '[cc]', '(cc)', ' cc', 'cc '})
+        or title == 'cc' or title == 'hi' or title == 'hoh'
+        or contains_any(title, {'hearing impaired', 'hard of hearing'})
+
+    local commentary = contains_any(title, {'commentary', 'comment', 'комментар'})
+    local score = 0
+    if contains_any(title, full_words) then score = score + 300 end
+    if impaired then score = score - 1500 end
+    if commentary then score = score - 5000 end
+    if track.default == true then score = score + 10 end
+    if track.external == true then score = score + 20 end
+    if frames > 0 then score = score + math.min(frames, 2000) / 5 end
+
+    return {
+        track = track,
+        score = score,
+        forced = explicit_forced,
+        sparse = sparse,
+        impaired = impaired,
+        frames = frames
+    }
+end
+
+local function subtitle_language_matches(track, wanted)
+    local lang = language(track.lang)
+    if lang == wanted then return true end
+
+    -- A few external files have no language tag but do have a useful title.
+    local title = lower(title_of(track))
+    if wanted == 'en' then
+        return contains_any(title, {'english', '[eng]', '(eng)'})
+    end
+    if wanted == 'ru' then
+        return contains_any(title, {'russian', '[rus]', '(rus)', 'русские', 'русский'})
+            or contains_any(title_of(track), {'Русские', 'Русский'})
+    end
+    return false
+end
+
+local function choose_audio(tracks)
+    local best, best_score = nil, -math.huge
+    for _, track in ipairs(tracks) do
+        if track.type == 'audio' then
+            local score = audio_score(track)
+            if debug then
+                mp.msg.info(string.format('audio %-30s score=%g', track_label(track), score))
+            end
+            if score > best_score then
+                best, best_score = track, score
+            end
+        end
+    end
+    return best
+end
+
+local function choose_subtitle(tracks, wanted, duration)
+    if wanted == 'none' then return nil, 'disabled' end
+
+    local candidates = {}
+    for _, track in ipairs(tracks) do
+        if track.type == 'sub' and subtitle_language_matches(track, wanted) then
+            local info = subtitle_info(track, duration)
+            table.insert(candidates, info)
+            if debug then
+                mp.msg.info(string.format(
+                    'sub   %-30s score=%g frames=%d forced=%s sparse=%s impaired=%s',
+                    track_label(track), info.score, info.frames,
+                    tostring(info.forced), tostring(info.sparse), tostring(info.impaired)
+                ))
+            end
+        end
+    end
+
+    -- Never silently choose signs-only/forced subtitles as dialogue translation.
+    local usable = {}
+    for _, info in ipairs(candidates) do
+        if not info.forced and not info.sparse then
+            table.insert(usable, info)
+        end
+    end
+
+    if #usable == 0 then
+        if #candidates == 0 then return nil, 'not found' end
+        return nil, 'only forced/signs-only tracks found'
+    end
+
+    local best, best_score = nil, -math.huge
+    for _, info in ipairs(usable) do
+        if info.score > best_score then
+            best, best_score = info.track, info.score
+        end
+    end
+    return best, nil
+end
+
+mp.register_event('file-loaded', function()
+    local tracks = mp.get_property_native('track-list') or {}
+    local duration = mp.get_property_number('duration', 0) or 0
+
+    local audio = choose_audio(tracks)
+    if audio then
+        mp.set_property('aid', tostring(audio.id))
+    end
+
+    local sub, sub_reason = choose_subtitle(tracks, wanted_subs, duration)
+    if sub then
+        mp.set_property('sid', tostring(sub.id))
+    else
+        mp.set_property('sid', 'no')
+    end
+
+    local audio_text = audio and track_label(audio) or 'not found'
+    local sub_text
+    if sub then
+        sub_text = track_label(sub)
+    elseif wanted_subs == 'none' then
+        sub_text = 'off'
+    else
+        sub_text = wanted_subs .. ': ' .. tostring(sub_reason)
+    end
+
+    mp.msg.info('smart-mpv selected audio: ' .. audio_text)
+    mp.msg.info('smart-mpv selected subs:  ' .. sub_text)
+    mp.osd_message('Audio: ' .. audio_text .. '\nSubs: ' .. sub_text, 3)
+end)
+LUA
+
+SMART_MPV_SUBS="$subs" SMART_MPV_DEBUG="$debug" \
+    mpv --script="$lua_script" "${mpv_args[@]}"

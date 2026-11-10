@@ -59,6 +59,16 @@ Skip on headless / remote-SSH hosts.
 stow -t ~ -d stow term-gui
 ```
 
+### Linux desktop (on top of base)
+
+Adds Linux-only desktop utilities. Skip on headless / remote-SSH hosts.
+
+```bash
+stow -t ~ -d stow linux-desktop
+```
+
+`linux-desktop` currently provides `~/bin/smart-mpv` (requires `mpv`).
+
 Ghostty renders Cyrillic with a bold Hack face so latin `c` and cyrillic `с` never
 look alike (iTerm2 did this via "Non-ASCII font"). Ghostty matches fonts by family
 name only, so the bold face has to exist as its own family. Generate it once per Mac
@@ -159,6 +169,7 @@ stow -n -v -t ~ -d stow shell   # dry-run, shows what will be symlinked
 | `stow/shell/` | `.zshrc`, `.profile`, common zsh modules |
 | `stow/term/` | `.tmux.conf`, `starship.toml`, `tuios/config.toml` |
 | `stow/term-gui/` | Cross-platform GUI terminals (WezTerm, Ghostty) — any Mac or Linux desktop |
+| `stow/linux-desktop/` | Linux-only desktop utilities, including `smart-mpv`; skip on SSH/headless hosts |
 | `stow/git/` | `.gitconfig`, global `git/ignore` |
 | `stow/bin/` | cross-platform scripts |
 | `stow/macos-common/` | Any Mac: macfeh, pgcli, neovide, mac-only bin scripts |
