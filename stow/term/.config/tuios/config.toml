@@ -222,3 +222,7 @@ addr = "smsgate1"
 
 [hosts.smsgate2]
 addr = "smsgate2"
+
+
+[agents]
+enabled = true
