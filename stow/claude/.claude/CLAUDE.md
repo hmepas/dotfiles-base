@@ -38,10 +38,13 @@ Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-s
 **Don't assume. Don't hide confusion. Surface tradeoffs.**
 
 Before implementing:
-- State your assumptions explicitly. If uncertain, ask.
+- Explicitly state your assumptions that change the solution's behavior. If uncertain, ask.
 - If multiple interpretations exist, present them - don't pick silently.
 - If a simpler approach exists, say so. Push back when warranted.
 - If something is unclear, stop. Name what's confusing. Ask.
+- Prefer mature, well-maintained libraries over custom implementations.
+- Prefer verifying against sources over relying on the model's training knowledge.
+
 
 ## 2. Simplicity First
 
@@ -71,6 +74,9 @@ When your changes create orphans:
 
 The test: Every changed line should trace directly to the user's request.
 
+Fix the root cause, not the symptom!
+Look for implicit state machines and propose a version with explicitly modeled state!
+
 ## 4. Goal-Driven Execution
 
 **Define success criteria. Loop until verified.**
@@ -88,6 +94,7 @@ For multi-step tasks, state a brief plan:
 ```
 
 Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
+Report what was verified and what could not be verified!
 
 ## 5. In short
 1. Ask, don't assume. If something is unclear, ask before writing a single line. Never make silent assumptions about intent, architecture, or requirements.
