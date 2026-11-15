@@ -1,0 +1,106 @@
+# Arch Linux desktop (Hyprland) on top of pkglist.txt.
+#
+#   sed 's/#.*//' packages/arch/pkglist.desktop.txt | xargs sudo pacman -S --needed
+#
+# Curated: hardware drivers (GPU/CPU microcode/fans/mouse), audio device tuning,
+# VPN stack, local LLMs and games are intentionally NOT here — pick per machine.
+
+# --- Session: Hyprland via uwsm, SDDM with labwc greeter (system/linux-desktop) ---
+hyprland
+uwsm
+hyprpaper
+hyprpm
+xdg-desktop-portal-hyprland
+xdg-desktop-portal-gtk
+polkit-gnome
+qt5-wayland
+qt6-wayland
+sddm
+labwc
+wlr-randr
+keyd
+
+# --- Bar / launchers / notifications ---
+swaync
+rofi
+wofi
+network-manager-applet
+blueman
+cliphist
+wl-clipboard
+wtype
+jq
+
+# --- Screenshots ---
+hyprshot
+grim
+slurp
+satty
+
+# --- Terminal / TUI ---
+ghostty
+ghostty-shell-integration
+ghostty-terminfo
+neovim
+yazi
+superfile
+btop
+htop
+
+# --- Theming / fonts (applied with nwg-look + qt6ct, see README) ---
+nwg-look
+qt6ct
+papirus-icon-theme
+ttf-hack-nerd
+ttf-jetbrains-mono-nerd
+ttf-nerd-fonts-symbols-mono
+ttf-roboto
+
+# --- Audio stack (device-specific tuning is done per machine) ---
+pipewire
+pipewire-alsa
+pipewire-jack
+pipewire-pulse
+wireplumber
+gst-plugin-pipewire
+pavucontrol
+
+# --- Media / docs ---
+mpv
+imv
+pinta
+obs-studio
+zathura
+zathura-pdf-mupdf
+imagemagick
+
+# --- Gaming (Steam + Proton; Proton-GE from AUR) ---
+steam
+gamemode
+gamescope
+mangohud
+lib32-vulkan-icd-loader
+
+# --- Apps ---
+firefox
+telegram-desktop
+obsidian
+qalculate-gtk
+mission-center
+dolphin
+flatpak
+
+# --- System ---
+networkmanager
+bluez
+bluez-utils
+power-profiles-daemon
+pacman-contrib
+reflector
+timeshift
+zram-generator
+docker
+docker-compose
+openssh
+man-db
+wev

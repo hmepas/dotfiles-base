@@ -27,6 +27,9 @@
     # `git diff` with difftastic.
     dft = -c diff.external=difft diff
 
+[init]
+    defaultBranch = main
+
 [push]
     default = simple
     autoSetupRemote = true

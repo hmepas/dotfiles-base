@@ -1,0 +1,9 @@
+#!/bin/bash
+
+#Findding codepoint
+CHAR=$1
+
+CODE=$(printf "%x" "'$CHAR")
+echo "Code: U+$CODE"
+echo "Found in fonts:";
+fc-list ":charset=$CODE" family | sort | uniq

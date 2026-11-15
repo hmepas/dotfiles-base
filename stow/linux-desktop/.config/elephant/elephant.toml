@@ -1,0 +1,3 @@
+# ~/.config/elephant/elephant.toml
+
+ignored_providers = ["1password", "bitwarden"]

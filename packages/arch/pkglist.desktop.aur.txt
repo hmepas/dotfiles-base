@@ -1,0 +1,30 @@
+# AUR packages for the Arch desktop (via paru).
+#
+#   sed 's/#.*//' packages/arch/pkglist.desktop.aur.txt | xargs paru -S --needed
+
+paru
+
+# --- Desktop shell ---
+waybar-git
+walker
+elephant-all
+snappy-switcher
+lvsk-calendar
+
+# --- Theming / fonts ---
+catppuccin-gtk-theme-mocha
+catppuccin-cursors-mocha
+hyprqt6engine
+sddm-astronaut-theme
+
+# --- Terminals / tools ---
+tuios-bin
+wezterm-git
+fnm-bin
+google-chrome
+cursor-bin
+obs-cmd-bin
+timeshift-autosnap
+
+# --- Gaming ---
+proton-ge-custom-bin

@@ -1,44 +1,46 @@
 # Arch / pacman packages — dotfiles-base core.
 #
-# Usage:
-#   sudo pacman -S --needed - < packages/arch/pkglist.txt
+# Shared by the Linux desktop and SSH hosts. Desktop extras: pkglist.desktop.txt.
 #
-# TODO: populate during the first deployment on Arch.
-# Draft (checking against brew leaves on Mac):
+# Usage (strip comments, pacman does not understand them):
+#   sed 's/#.*//' packages/arch/pkglist.txt | xargs sudo pacman -S --needed
+#
+# Uncommented = verified on the Arch desktop (2026-11).
+# Commented   = draft from Mac brew leaves, not installed there yet.
 
-# base-devel
-# git
-# stow
+base-devel
+git
+stow
 # gitleaks
 # pre-commit
 #
-# zsh
-# bash
+zsh
+bash
 # bash-completion
-# tmux
-# starship
-# zoxide
+tmux
+starship
+zoxide
 # carapace-bin
 #
-# fzf
-# fd
-# the_silver_searcher
-# ripgrep
+fzf
+fd
+the_silver_searcher
+ripgrep
 # ast-grep
-# eza
+eza
 # bat
 # gdu
 #
-# github-cli
+github-cli
 # git-filter-repo
 # difftastic
 #
-# cmake
-# go
-# tree-sitter
-# tree-sitter-cli
+cmake
+go
+tree-sitter
+tree-sitter-cli
 #
-# python
+python
 # python-pipx
 # python-pipenv
 # ruff
@@ -47,22 +49,22 @@
 # pnpm
 #
 # pgcli
-# postgresql
+postgresql
 #
-# ffmpeg
+ffmpeg
 # sox
 # mkvtoolnix-cli
 #
 # cloc
-# fastfetch
+fastfetch
 # markdownlint-cli
 # p7zip
-# parallel
-# pwgen
+parallel
+pwgen
 # renameutils
 # inetutils
 # terminal-notifier-linux  # optional, alternative notify
 # tldr
 # websocat
-# wget
+wget
 # dnsmasq

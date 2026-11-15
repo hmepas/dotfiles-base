@@ -1,0 +1,44 @@
+#!/bin/bash
+# Toggle launcher for lvsk-calendar: floating popup pinned to the top-right,
+# under the waybar clock. First click opens it, second click closes it.
+#
+# Why a custom launcher instead of lvsk-calendar-launcher?
+#  - it injects a `center on` rule, forcing the window to screen center;
+#  - it sets only a title, leaving the window with ghostty's shared class.
+# Here we give the window a dedicated class so it can be matched/toggled reliably,
+# float+size it via rules (Hyprland honors those), and place it with the
+# `movewindowpixel` dispatcher once it maps — because Hyprland 0.55 silently
+# ignores `move` in window rules.
+
+# Class must be a valid GTK/D-Bus app-id (reverse-DNS, needs a dot) or ghostty
+# rejects it and falls back to its default shared class.
+CLASS="com.lvsk.calendar"
+TITLE="lvsk-calendar"
+CALENDAR_SCRIPT="/usr/bin/lvsk-calendar"
+
+# Target position (1920x1080 monitor): 600px-wide window, ~10px from the right
+# edge, just below the bar. Adjust X/Y here if the bar height or width changes.
+POS_X=1310
+POS_Y=40
+
+# Toggle: if the calendar is already open, close it and bail.
+if hyprctl clients -j | jq -e --arg c "$CLASS" 'any(.[]; .class == $c)' >/dev/null 2>&1; then
+    hyprctl dispatch closewindow "class:^${CLASS}$" >/dev/null 2>&1
+    exit 0
+fi
+
+if [ -n "$HYPRLAND_INSTANCE_SIGNATURE" ]; then
+    hyprctl keyword windowrule "float on, match:class ^${CLASS}$" >/dev/null 2>&1
+    hyprctl keyword windowrule "size 600 500, match:class ^${CLASS}$" >/dev/null 2>&1
+    hyprctl keyword windowrule "size 600 500, match:class ^${CLASS}$" >/dev/null 2>&1
+    hyprctl keyword windowrule "move ${POS_X} ${POS_Y}, match:class ^${CLASS}$" >/dev/null 2>&1
+fi
+
+# --gtk-single-instance=false is required for --class to apply to this window
+# instead of being absorbed by the shared ghostty instance.
+# --confirm-close-surface=false skips ghostty's "close window?" prompt, so the
+# toggle's `closewindow` closes the popup immediately (the calendar always has a
+# running process in the surface, which would otherwise trigger the dialog).
+exec ghostty --gtk-single-instance=false --confirm-close-surface=false \
+    --class="$CLASS" --title="$TITLE" \
+    -e env LAUNCHED_BY_LAUNCHER=1 "$CALENDAR_SCRIPT"

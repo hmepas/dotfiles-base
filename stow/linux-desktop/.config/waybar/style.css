@@ -1,0 +1,56 @@
+window#waybar {
+    background: rgba(26, 27, 38, 0.6); /* Полупрозрачный темный */
+    color: #c0caf5;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-family: "JetBrainsMono Nerd Font", "Symbols Nerd Font Mono", sans-serif;
+    font-size: 13px;
+    transition-property: background-color;
+    transition-duration: .5s;
+}
+
+#cpu, #temperature, #custom-gpu, #memory, #pulseaudio, #bluetooth, #clock, #custom-keybindings {
+    padding: 0 10px;
+    margin: 4px 2px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border-bottom: 2px solid transparent;
+}
+
+#custom-keybindings {
+    color: #e0af68;
+    font-size: 15px;
+}
+
+#custom-keybindings:hover {
+    background: rgba(224, 175, 104, 0.18);
+    border-bottom-color: #e0af68;
+}
+
+/* Подсветка при нагрузке */
+#cpu { color: #7aa2f7; }
+#custom-gpu { color: #bb9af7; }
+#temperature { color: #f7768e; }
+#temperature.critical {
+    background: #f7768e;
+    color: #1a1b26;
+}
+
+#workspaces button {
+    padding: 0 8px;
+    background: transparent;
+    color: #cdd6f4;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+#workspaces button.active {
+    color: #89b4fa;
+    background: rgba(137, 180, 250, 0.1);
+    border-bottom: 3px solid #89b4fa;
+}
+
+#workspaces button.urgent {
+    background-color: #eb4d4b;
+    color: white;
+}

@@ -3,6 +3,7 @@
 
 # --- Environment Variables ---
 export EDITOR=vim
+command -v nvim &> /dev/null && export EDITOR=nvim # aliases (vim=nvim below) don't apply to $EDITOR
 export LANG=en_US.UTF-8 # Good practice to set locale
 
 # Determine OS
@@ -101,17 +102,13 @@ autoload -U compinit && compinit -u # Use -u to avoid security check on first ru
 # --- GPG Agent ---
 # Start gpg-agent if not running
 if command -v gpg-agent &> /dev/null; then
-  # Check if agent info file exists and process is running
-  if test -f $HOME/.gpg-agent-info && \
-     kill -0 $(cut -d: -f 2 $HOME/.gpg-agent-info) 2>/dev/null; then
-      export GPG_AGENT_INFO=$(cat $HOME/.gpg-agent-info)
-  # Check if gnupg directory exists (needed to start agent)
-  elif [ -d ~/.gnupg ]; then
-      # Start the agent with SSH support
-      eval $(gpg-agent --daemon --enable-ssh-support --default-cache-ttl 86400 --max-cache-ttl 700000)
-      echo $GPG_AGENT_INFO > $HOME/.gpg-agent-info
-  fi
   export GPG_TTY=$(tty)
+  # GnuPG >= 2.1 uses a fixed socket (no ~/.gpg-agent-info): just ping it.
+  # SSH_AUTH_SOCK is NOT set here: SSH hosts keep the forwarded agent,
+  # desktops pick their agent via a .zshrc.local module.
+  if ! gpg-connect-agent /bye &> /dev/null && [ -d ~/.gnupg ]; then
+      eval $(gpg-agent --daemon --enable-ssh-support --default-cache-ttl 86400 --max-cache-ttl 700000)
+  fi
 fi
 
 # --- Tmux Auto-start on SSH ---

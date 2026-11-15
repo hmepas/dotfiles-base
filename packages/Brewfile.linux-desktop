@@ -1,0 +1,9 @@
+# Linuxbrew leftovers on the Arch desktop (things without a good Arch package).
+#   brew bundle --file=packages/Brewfile.linux-desktop
+
+tap "hmepas/resume"
+brew "hmepas/resume/resume"
+
+# Docker VM; `brew services start colima` generates the systemd user unit.
+brew "colima"
+brew "yt-dlp"

@@ -1,0 +1,34 @@
+[general]
+# Запуск в режиме демона для устранения задержек при вызове
+run_as_service = true
+
+[ui]
+# Ширина окна. Стилизация делается через CSS в ~/.config/walker/themes/
+width = 600
+
+[providers]
+# Провайдеры, которые отображаются по умолчанию при пустом вводе
+default = ["desktopapplications", "clipboard"]
+
+# Калькулятор по префиксу "="
+[[providers.prefixes]]
+prefix = "="
+provider = "calculator"
+
+[[providers.prefixes]]
+prefix = "g "
+provider = "websearch"
+
+# Сниппеты по префиксу "s "
+[[providers.prefixes]]
+prefix = "s "
+provider = "snippets"
+
+# Принудительный фильтр по истории клипборда
+[[providers.prefixes]]
+prefix = "c "
+provider = "clipboard"
+
+[[providers.prefixes]]
+prefix = "bw " # или любой удобный
+provider = "bitwarden"

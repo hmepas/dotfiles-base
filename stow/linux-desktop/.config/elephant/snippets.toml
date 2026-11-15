@@ -1,0 +1,14 @@
+[[snippets]]
+keywords = ["email"]
+name = "email"
+content = "pavel@example.com"
+
+[[snippets]]
+keywords = ["shrug"]
+name = "shrug"
+content = "¯\\_(ツ)_/¯"
+
+[[snippets]]
+keywords = ["phone"]
+name = "phone"
+content = "+7 999 000-00-00"

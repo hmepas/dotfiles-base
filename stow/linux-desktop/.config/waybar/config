@@ -1,0 +1,121 @@
+{
+    "output": "HDMI-A-1",
+    "layer": "top",
+    "position": "top",
+    "margin-top": 5,
+    "margin-left": 10,
+    "margin-right": 10,
+    "spacing": 4,
+
+    "modules-left": [
+        "hyprland/workspaces"
+    ],
+    "modules-right": [
+        "cpu",
+        "temperature",
+        "custom/gpu",
+        "memory",
+        "pulseaudio",
+        "bluetooth",
+        "hyprland/language",
+        "clock",
+        "custom/keybindings",
+        "tray"
+    ],
+
+    "hyprland/workspaces": {
+        "format": "{name} {icon} {windows}",
+        "format-icons": {
+            "active": "",
+            "default": ""
+        },
+        "persistent-workspaces": {
+            "*": 10
+        },
+        "workspace-taskbar": {
+            // Enable the workspace taskbar. Default: false
+            "enable": true,
+
+            // If true, the active/focused window will have an 'active' class. Could cause higher CPU usage due to more frequent redraws. Default: false
+            "update-active-window": true,
+
+            // Format of the windows in the taskbar. Default: "{icon}". Allowed variables: {icon}, {title}
+            //"format": "{icon} {title:.20}",
+            "format": "{icon}",
+
+            // Icon size in pixels. Default: 16
+            "icon-size": 16,
+
+            // Orientation of the taskbar ("horizontal" or "vertical"). Default: "horizontal".
+            "orientation": "horizontal",
+
+            // Focus the clicked window (switches workspace too)
+            "on-click-window": "hyprctl dispatch 'hl.dsp.focus({ window = \"address:{address}\" })'",
+
+            // List of regexes. A window will NOT be shown if its window class or title match one or more items. Default: []
+            "ignore-list": [ "code", "Firefox - .*" ]
+        },
+        "window-rewrite": {
+            "title<.*youtube.*>": "", // Если в заголовке есть youtube
+            "class<firefox>": "",
+            "class<kitty>": "",
+            "class<wezterm>": "",
+            "class<ghostty>": "󰊠",
+            "class<code-oss>": "󰨞",
+            "class<discord>": "󰙯",
+            "class<bitwarden>": ""
+        }
+    },
+
+    "cpu": {
+        "format": " {usage}%",
+        "tooltip": false,
+        "interval": 2
+    },
+
+    "temperature": {
+        "hwmon-name": "k10temp",
+        "input-filename": "temp1_input",
+        "critical-threshold": 88,
+        "format": "{icon} {temperatureC}°C",
+        "format-icons": ["", "", ""],
+        "interval": 2
+    },
+
+    "custom/gpu": {
+        "exec": "nvidia-smi --query-gpu=utilization.gpu,temperature.gpu --format=csv,noheader,nounits | awk -F', ' '{print \"󰢮 \" $1 \"% | \" $2 \"°C\"}'",
+        "interval": 2,
+        "format": "{}",
+        "tooltip": false
+    },
+
+    "memory": {
+        "format": "󰍛 {}%"
+    },
+
+    "hyprland/language": {
+        "format": "  {}",
+        "format-en": "EN",
+        "format-ru": "RU",
+        "format-zh": "ZH", // Если добавил китайскую раскладку в систему
+        "on-click": "hyprctl switchxkblayout all next",
+        //"keyboard-name": "compx-air84@lofree" // find the right one via `hyprctl devices`
+        "keyboard-name": "keyd-virtual-keyboard" // find the right one via `hyprctl devices`
+    },
+
+    "clock": {
+        "format": "{:%Y-%m-%d %H:%M}",
+        "tooltip-format": "Click to show calendar",
+        "on-click": "~/bin/lvsk-calendar-popup"
+    },
+
+    "custom/keybindings": {
+        "exec": "~/.config/hypr/scripts/keybindings-cheatsheet.py --waybar",
+        "return-type": "json",
+        "interval": 30,
+        "tooltip": true,
+        "on-click": "~/.config/hypr/scripts/keybindings-cheatsheet.py --rofi",
+        "on-click-middle": "~/.config/hypr/scripts/keybindings-cheatsheet.py --categories",
+        "on-click-right": "~/.config/hypr/scripts/keybindings-cheatsheet.py --visual"
+    }
+}

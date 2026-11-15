@@ -1,0 +1,4 @@
+[mgr]
+prepend_keymap = [
+    { on = [ "c", "y" ], run = 'shell "echo \"file://$@\" | wl-copy -t text/uri-list"', desc = "Copy to system clipboard" }
+]

@@ -1,0 +1,14 @@
+[[engines]]
+name = "Google"
+prefix = "g "
+url = "https://www.google.com/search?q=%TERM%"
+
+[[engines]]
+name = "YouTube"
+prefix = "y "
+url = "https://www.youtube.com/results?search_query=%TERM%"
+
+[[engines]]
+name = "Arch Wiki"
+prefix = "aw "
+url = "https://wiki.archlinux.org/index.php?search=%TERM%"

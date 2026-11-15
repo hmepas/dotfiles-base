@@ -1,12 +1,13 @@
 local wezterm = require 'wezterm'
-return {
+local is_linux = wezterm.target_triple:find('linux') ~= nil
+
+local config = {
 	adjust_window_size_when_changing_font_size = false,
 	-- color_scheme = 'termnial.sexy',
 	color_scheme = 'Catppuccin Mocha',
     -- color_scheme = 'Solarized Dark - Patched',
 	enable_tab_bar = false,
 	font_size = 13.0,
-	font = wezterm.font('Hack Nerd Font Mono'),
 
 	-- macos_window_background_blur = 40,
 	macos_window_background_blur = 30,
@@ -21,7 +22,6 @@ return {
 	window_background_opacity = 1.0,
 	-- window_background_opacity = 0.78,
 	-- window_background_opacity = 0.20,
-	window_decorations = 'RESIZE',
 	keys = {
 		{
 			key = 'q',
@@ -43,3 +43,21 @@ return {
 	  },
 	},
 }
+
+if is_linux then
+  config.enable_wayland = true
+  config.front_end = "OpenGL"
+  config.font = wezterm.font_with_fallback({
+    { family = "Hack Nerd Font Mono", weight = "Regular" },
+    { family = "JetBrainsMono Nerd Font" },
+    { family = "Symbols Nerd Font Mono" },
+    { family = "Roboto" },
+    { family = "sans-serif" },
+  })
+  config.window_padding = { left = 0, right = 0, top = 0, bottom = 0 }
+else
+  config.font = wezterm.font('Hack Nerd Font Mono')
+  config.window_decorations = 'RESIZE'
+end
+
+return config

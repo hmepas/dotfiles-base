@@ -37,4 +37,5 @@ export PATH="$PATH:$HOME/.local/bin"
 export PATH="$PATH:$HOME/.lmstudio/bin"
 # End of LM Studio CLI section
 
-. "$HOME/.cargo/env"
+# Guarded: uwsm sources ~/.profile with sh at login, a missing file would abort it.
+if [ -f "$HOME/.cargo/env" ]; then . "$HOME/.cargo/env"; fi

@@ -1,0 +1,7 @@
+# Flatpak apps for the Linux desktop.
+#
+#   sed 's/#.*//' packages/flatpak.linux-desktop.txt | xargs flatpak install -y flathub
+
+# Bitwarden: also the SSH agent (stow/linux-desktop/.zshrc.local/btw-ssh-agent.zsh)
+com.bitwarden.desktop
+dev.vencord.Vesktop

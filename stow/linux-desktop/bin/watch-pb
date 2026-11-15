@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Прячем курсор для чистоты обновления (опционально)
+tput civis
+# Возвращаем курсор при прерывании скрипта (Ctrl+C)
+trap "tput cnorm; exit" INT
+
+while true; do
+    # Очищаем экран (tput clear работает быстрее и надежнее, чем clear)
+    tput clear
+    
+    echo -e "\033[1;32m=== CLIPBOARD (Ctrl+C / +) ===\033[0m"
+    # --no-newline убирает лишние переносы, head режет огромные тексты
+    wl-paste --no-newline | head -n 20
+    
+    echo -e "\n\n\033[1;34m=== PRIMARY (Выделение мышью / *) ===\033[0m"
+    wl-paste --primary --no-newline | head -n 20
+
+    sleep 0.5
+done

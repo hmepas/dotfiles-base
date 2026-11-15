@@ -1,0 +1,2 @@
+#!/bin/bash
+google-chrome-stable --enable-features=Vulkan,DefaultANGLEVulkan,VulkanFromANGLE --ozone-platform-hint=auto
