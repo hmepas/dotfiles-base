@@ -52,7 +52,8 @@ stow --no-folding -t ~ -d stow claude
 
 ### Any GUI host (Mac or Linux desktop)
 
-Adds cross-platform GUI terminal configs (WezTerm, Ghostty).
+Adds cross-platform GUI terminal configs (WezTerm, Ghostty) and zsh key
+bindings for the sequences they send (`.zshrc.local/keybinding.zsh`).
 Skip on headless / remote-SSH hosts.
 
 ```bash
@@ -82,6 +83,13 @@ stow -t ~ -d stow macos-common
 
 Existing Macs after the Ghostty split: `stow -R -t ~ -d stow term-gui macos-common`
 (adds `~/.config/ghostty/macos.conf`; without it Ghostty loses the Mac bits).
+`start-colima` moved from `bin-common` to `macos-common` as `colima-start`:
+after pull remove the dangling link (`rm ~/bin/start-colima`) and re-stow.
+`keybinding.zsh` moved from `macos-common` to `term-gui`: likewise
+`rm ~/.zshrc.local/keybinding.zsh` before re-stowing.
+
+`colima-start` exists per OS (Mac: `macos-common`, Linux desktop: `linux-desktop`),
+SSH hosts get none.
 
 ### Personal Mac (on top of base)
 
@@ -167,7 +175,7 @@ Root-owned parts (SDDM greeter, keyd Super+C/V) — see
 
 | Thing | Where |
 |---|---|
-| Hyprland (`~/.config/hypr`, Lua config, cheatsheet scripts) | own git repo, not here |
+| Hyprland (`~/.config/hypr`: Lua config, cheatsheet scripts; its own README) | `stow/linux-desktop/.config/hypr` |
 | Neovim | `dotfiles-nvim` repo |
 | waybar, walker + elephant, rofi, swaync, snappy-switcher, yazi, fontconfig, portals | `stow/linux-desktop/.config` |
 | Ghostty Linux overlay (`linux.conf`, `ctrl-ru.conf` Ctrl+cyrillic fix) | `stow/linux-desktop/.config/ghostty` |
@@ -186,7 +194,7 @@ Root-owned parts (SDDM greeter, keyd Super+C/V) — see
 - SSH agent on desktop = Bitwarden (flatpak); base `.zshrc` never sets
   `SSH_AUTH_SOCK`, so SSH hosts keep the forwarded agent.
 - Steam games run on Proton-GE (`proton-ge-custom-bin`); per-game launch
-  options/HDR notes live with the Hyprland repo (`GAMERUN.md`).
+  options/HDR notes: `stow/linux-desktop/.config/hypr/GAMERUN.md`.
 - Generated or app-owned files are not stored: `mimeapps.list` (use
   `set-mpv-defaults.sh`), `btop.conf`, superfile themes, elephant docs,
   `brew services` units, completion dumps.

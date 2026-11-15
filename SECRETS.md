@@ -30,6 +30,8 @@ Use the `~/.zshrc.secret` file
 ```lua
 -- Private Hammerspoon values (not in dotfiles repo). Loaded by modules/modes/app_launch.lua.
 return {
-  ZOOM_MEETING_URL = "https://us06web.zoom.us/j/4544544848?pwd=JNkEbqT3MQ0UrmI0jsd5UMTXtMqD07.1",
+  -- Fill in: Zoom app -> Meetings -> Personal Meeting ID -> "Copy invitation",
+  -- take the https://…zoom.us/j/<id>?pwd=<pwd> link. Never commit the real one.
+  ZOOM_MEETING_URL = "https://<subdomain>.zoom.us/j/<meeting-id>?pwd=<passcode>",
 }
 

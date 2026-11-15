@@ -1,4 +1,4 @@
-# --- Key Bindings ---
+# --- Key Bindings (GUI terminals: Mac + Linux desktop; not for SSH hosts) ---
 # Ensure Zsh is in emacs mode for standard keybindings
 bindkey -e
 

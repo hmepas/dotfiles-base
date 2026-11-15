@@ -143,8 +143,4 @@ unset ZSHRC_LOCAL_DIR # Removed unset, might be useful for debugging
 unset HOSTOS DATE FIRST_UNATTACHED _gen_fzf_default_opts # Clean up temporary variables/functions 
 
 
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:$HOME/.lmstudio/bin"
-# End of LM Studio CLI section
-
 alias vim=nvim
