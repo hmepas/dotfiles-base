@@ -3,7 +3,6 @@
 
 # --- Environment Variables ---
 export EDITOR=vim
-command -v nvim &> /dev/null && export EDITOR=nvim # aliases (vim=nvim below) don't apply to $EDITOR
 export LANG=en_US.UTF-8 # Good practice to set locale
 
 # Determine OS
@@ -99,16 +98,11 @@ fpath=($HOME/.zsh/completion $fpath)
 # Initialize completion system
 autoload -U compinit && compinit -u # Use -u to avoid security check on first run
 
-# --- GPG Agent ---
-# Start gpg-agent if not running
-if command -v gpg-agent &> /dev/null; then
+# --- GPG ---
+# GnuPG starts its agent on demand with default settings.
+# Give terminal pinentry the current TTY; leave SSH_AUTH_SOCK untouched.
+if [[ -t 0 ]] && command -v gpg &> /dev/null; then
   export GPG_TTY=$(tty)
-  # GnuPG >= 2.1 uses a fixed socket (no ~/.gpg-agent-info): just ping it.
-  # SSH_AUTH_SOCK is NOT set here: SSH hosts keep the forwarded agent,
-  # desktops pick their agent via a .zshrc.local module.
-  if ! gpg-connect-agent /bye &> /dev/null && [ -d ~/.gnupg ]; then
-      eval $(gpg-agent --daemon --enable-ssh-support --default-cache-ttl 86400 --max-cache-ttl 700000)
-  fi
 fi
 
 # --- Tmux Auto-start on SSH ---
@@ -138,6 +132,10 @@ if [ -d "$ZSHRC_LOCAL_DIR" ]; then
   unset config_file # Clean up loop variable
 fi
 unset ZSHRC_LOCAL_DIR # Removed unset, might be useful for debugging
+
+# Select the editor after PATH setup, including local modules.
+# The vim alias below does not apply to $EDITOR.
+command -v nvim &> /dev/null && export EDITOR=nvim
 
 # --- Clean up ---
 unset HOSTOS DATE FIRST_UNATTACHED _gen_fzf_default_opts # Clean up temporary variables/functions 
