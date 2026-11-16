@@ -116,6 +116,9 @@
 # `tuios list-dock-components` says which and why.
 # ============================================================================
 
+# Machine-local hosts (not committed).
+include = ["~/.config/tuios/tuios-hosts.local.toml"]
+
 [startup]
 tiled = true
 daemon = true
@@ -216,13 +219,6 @@ move_and_follow_6 = [] # Instead: Ctrl-A, Ctrl-T, w, ^; then Ctrl-A, 6.
 move_and_follow_7 = [] # Instead: Ctrl-A, Ctrl-T, w, &; then Ctrl-A, 7.
 move_and_follow_8 = [] # Instead: Ctrl-A, Ctrl-T, w, *; then Ctrl-A, 8.
 move_and_follow_9 = [] # Instead: Ctrl-A, Ctrl-T, w, (; then Ctrl-A, 9.
-
-[hosts.smsgate1]
-addr = "smsgate1"
-
-[hosts.smsgate2]
-addr = "smsgate2"
-
 
 [agents]
 enabled = true
