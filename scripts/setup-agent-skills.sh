@@ -1,35 +1,25 @@
 #!/usr/bin/env bash
-# Clone/update shared agent skills and expose them to Claude, Codex, and Pi.
+# Stow personal skills; Claude needs links, Pi and Codex discover ~/.agents/skills.
 set -euo pipefail
+repo_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 
-skill_repo="${SKILL_REPO:-/Users/hmepas/projects/xlsx_skill}"
-skill_dir="$HOME/.agents/skills/xlsx"
-
-if [[ -d "$skill_dir/.git" ]]; then
-  git -C "$skill_dir" pull --ff-only
-else
-  mkdir -p "$(dirname "$skill_dir")"
-  git clone "$skill_repo" "$skill_dir"
-fi
-
-# A folded stow package would make ~/.claude point into this repository.
-if [[ -L "$HOME/.claude" ]]; then
-  echo "~/.claude is a symlink; stow claude with --no-folding first." >&2
-  exit 1
-fi
-
-for target in \
-  "$HOME/.claude/skills/xlsx" \
-  "$HOME/.codex/skills/xlsx" \
-  "$HOME/.pi/agent/skills/xlsx"
-do
-  mkdir -p "$(dirname "$target")"
-
+# Never write through folded application directories into a stow package.
+for dir in "$HOME/.agents" "$HOME/.agents/skills" "$HOME/.claude" "$HOME/.claude/skills"; do
+  if [[ -L "$dir" ]]; then
+    echo "Refusing to write through directory symlink: $dir" >&2
+    exit 1
+  fi
+done
+for skill in xlsx zk; do
+  target="$HOME/.claude/skills/$skill"
   if [[ -e "$target" && ! -L "$target" ]]; then
     echo "Refusing to replace non-symlink: $target" >&2
     exit 1
   fi
+done
 
-  rm -f "$target"
-  ln -s "$skill_dir" "$target"
+stow --no-folding -t "$HOME" -d "$repo_dir/stow" agent-skills
+mkdir -p "$HOME/.claude/skills"
+for skill in xlsx zk; do
+  ln -sfn "../../.agents/skills/$skill" "$HOME/.claude/skills/$skill"
 done

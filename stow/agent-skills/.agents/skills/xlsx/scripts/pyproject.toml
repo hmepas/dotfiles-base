@@ -1,0 +1,12 @@
+[project]
+name = "xlsx-skill"
+version = "0.1.0"
+description = "Agent Skill: scripts and best practices for working with XLSX files"
+requires-python = ">=3.11"
+dependencies = [
+    "openpyxl (>=3.1)",
+    "pandas (>=2.0)",
+]
+
+[tool.poetry]
+package-mode = false

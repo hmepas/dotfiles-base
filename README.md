@@ -39,16 +39,28 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 # Inside tmux: prefix + I
 ```
 
-`setup-agent-skills.sh` clones the xlsx skill into `~/.agents/skills/xlsx` and
-links it into Claude, Codex, and Pi. Override its personal local source when
-needed: `SKILL_REPO=<repository-url-or-path> ./scripts/setup-agent-skills.sh`.
-
-When stowing the `claude` package, use `--no-folding` so `~/.claude` remains a
-directory and skills are not written into this repository:
+`setup-agent-skills.sh` stows the personal `xlsx` and `zk` skills from this
+repository into `~/.agents/skills` and links them into Claude. Pi and Codex
+read the shared directory directly. For xlsx dependencies:
 
 ```bash
-stow --no-folding -t ~ -d stow claude
+poetry -C "$HOME/.agents/skills/xlsx/scripts" install
 ```
+
+On every host using the `claude` package, also install `pi` and `agent-skills`,
+including Macs, Linux desktops, and headless hosts. Use `--no-folding` so
+application state stays outside this repository:
+
+```bash
+stow --no-folding -t ~ -d stow claude pi
+./scripts/setup-agent-skills.sh
+npm --prefix stow/pi/.pi/agent/extensions/subagents ci --omit=dev --ignore-scripts
+```
+
+Pi gets the subagents extension and `/coding` prompt. The zk skill uses `~/zk`.
+Existing installations: compare and back up conflicting files before stowing.
+See [Pi setup and current settings](docs/pi.md) for migration and the remaining
+Mac/Linux differences.
 
 ### Any GUI host (Mac or Linux desktop)
 
@@ -239,6 +251,10 @@ stow -n -v -t ~ -d stow shell   # dry-run, shows what will be symlinked
 | `packages/Brewfile.personal` | Personal Mac |
 | `packages/Brewfile.work` | Work Mac |
 | `packages/arch/` | Arch Linux — pacman + paru |
+| `stow/claude/` | Shared Claude instructions, any agent host |
+| `stow/pi/` | Pi subagents extension and `/coding` prompt, same hosts as Claude |
+| `stow/agent-skills/` | Personal zk and xlsx skills shared by agents |
+| `docs/pi.md` | Pi setup, Mac settings snapshot, remaining Linux convergence |
 | `stow/shell/` | `.zshrc`, `.profile`, common zsh modules |
 | `stow/term/` | `.tmux.conf`, `starship.toml`, `tuios/config.toml` |
 | `stow/term-gui/` | Cross-platform GUI terminals (WezTerm, Ghostty) — any Mac or Linux desktop |
