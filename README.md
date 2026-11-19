@@ -54,10 +54,13 @@ application state stays outside this repository:
 ```bash
 stow --no-folding -t ~ -d stow claude pi
 ./scripts/setup-agent-skills.sh
-npm --prefix stow/pi/.pi/agent/extensions/subagents ci --omit=dev --ignore-scripts
+for ext in ask-user background-terminals file-search subagents; do
+  npm --prefix "stow/pi/.pi/agent/extensions/$ext" ci --omit=dev --ignore-scripts || break
+done
 ```
 
-Pi gets the subagents extension and `/coding` prompt. The zk skill uses `~/zk`.
+Pi gets `ask-user`, `background-terminals`, `file-search`, `subagents`, and the
+`/coding` prompt. The zk skill uses `~/zk`.
 Existing installations: compare and back up conflicting files before stowing.
 See [Pi setup and current settings](docs/pi.md) for migration and the remaining
 Mac/Linux differences.
@@ -255,7 +258,7 @@ stow -n -v -t ~ -d stow shell   # dry-run, shows what will be symlinked
 | `packages/Brewfile.work` | Work Mac |
 | `packages/arch/` | Arch Linux — pacman + paru |
 | `stow/claude/` | Shared Claude instructions, any agent host |
-| `stow/pi/` | Pi subagents extension and `/coding` prompt, same hosts as Claude |
+| `stow/pi/` | Shared Pi extensions and `/coding` prompt, same hosts as Claude |
 | `stow/agent-skills/` | Personal zk and xlsx skills shared by agents |
 | `docs/pi.md` | Pi setup, Mac settings snapshot, remaining Linux convergence |
 | `stow/shell/` | `.zshrc`, `.profile`, common zsh modules |

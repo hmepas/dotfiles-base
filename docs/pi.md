@@ -5,8 +5,8 @@
 На всех машинах, где ставится `stow/claude`, ставить также `pi` и
 `agent-skills`. Это не GUI-пакеты, подходят и для headless-хостов.
 
-- `stow/pi/.pi/agent/extensions/subagents/`: расширение без изменений кода.
-- `stow/pi/.pi/agent/extensions/shared/tool-call-timeout.ts`: его зависимость.
+- `stow/pi/.pi/agent/extensions/`: `ask-user`, `background-terminals`,
+  `file-search`, `subagents` и его зависимость `shared/tool-call-timeout.ts`.
 - `stow/pi/.pi/agent/prompts/coding.md`: команда `/coding`, не системный промпт.
 - `stow/macos-common/.pi/agent/extensions/mac-paste-image.ts`: вставка картинки из буфера macOS по `Ctrl+Shift+V` или `/paste-image-mac`. В общем пакете `pi` расширения нет.
 - `stow/agent-skills/.agents/skills/`: личные `zk` и `xlsx`, включая скрипты,
@@ -23,14 +23,18 @@
 stow -n -v --no-folding -t ~ -d stow claude pi agent-skills
 stow --no-folding -t ~ -d stow claude pi
 ./scripts/setup-agent-skills.sh
-npm --prefix stow/pi/.pi/agent/extensions/subagents ci --omit=dev --ignore-scripts
+for ext in ask-user background-terminals file-search subagents; do
+  npm --prefix "stow/pi/.pi/agent/extensions/$ext" ci --omit=dev --ignore-scripts || break
+done
 poetry -C "$HOME/.agents/skills/xlsx/scripts" install
 ```
 
 `npm ci` выполняется в репе: импорты расширения разрешаются относительно
 исходников. Pi предоставляет свои `@earendil-works/*` и `typebox`; отдельно
 ставятся runtime dependencies из lockfile. `--ignore-scripts` пропускает
-`prepare`, предназначенный для dev-инструментов.
+`prepare`, предназначенный для dev-инструментов. Для `file-search` можно
+установить `fd` и `ripgrep` через системный пакетный менеджер (на Debian/Ubuntu:
+`fd-find` и `ripgrep`).
 
 `--no-folding` обязателен: каталоги приложений остаются настоящими каталогами,
 в репу не попадают сессии, credentials и прочие runtime-файлы.
@@ -92,10 +96,10 @@ lockfile и `poetry install` при изменении Python-зависимос
 
 | Расширение | Статус |
 |---|---|
-| `subagents`, `shared/tool-call-timeout.ts` | Теперь в stow |
-| `ask-user` | Пока локальное |
-| `background-terminals` | Пока локальное |
-| `file-search` | Пока локальное |
+| `subagents`, `shared/tool-call-timeout.ts` | В stow |
+| `ask-user` | В stow |
+| `background-terminals` | В stow |
+| `file-search` | В stow |
 | `mac-paste-image.ts` | Mac-only, пока локальное |
 | `tuios-agent-state.ts` | Пока локальное |
 
