@@ -8,6 +8,7 @@
 - `stow/pi/.pi/agent/extensions/subagents/`: расширение без изменений кода.
 - `stow/pi/.pi/agent/extensions/shared/tool-call-timeout.ts`: его зависимость.
 - `stow/pi/.pi/agent/prompts/coding.md`: команда `/coding`, не системный промпт.
+- `stow/macos-common/.pi/agent/extensions/mac-paste-image.ts`: вставка картинки из буфера macOS по `Ctrl+Shift+V` или `/paste-image-mac`. В общем пакете `pi` расширения нет.
 - `stow/agent-skills/.agents/skills/`: личные `zk` и `xlsx`, включая скрипты,
   reference и Poetry lockfile. Отдельный xlsx-репозиторий больше не нужен.
 - `stow/claude/.claude/CLAUDE.md`: существующие инструкции Claude.
@@ -49,6 +50,10 @@ Pi и современные версии Codex обнаруживают `~/.age
 
 Vault должен быть доступен как `~/zk` на каждой машине. Если его там нет,
 создать ссылку на существующий vault. Не заменять уже существующий каталог.
+
+Только на macOS: `stow --no-folding -t ~ -d stow macos-common`. Если
+`~/.pi/agent/extensions/mac-paste-image.ts` уже есть, сравнить его с репой и
+убрать локальную копию из каталога расширений перед stow, как описано выше.
 
 После установки выполнить `/reload` в Pi, когда нет работающих подагентов.
 Проверить `/coding`, `/skill:zk`, `/skill:xlsx` и инструменты `subagent_*`.

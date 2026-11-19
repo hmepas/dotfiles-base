@@ -90,10 +90,13 @@ name only, so the bold face has to exist as its own family. Generate it once per
 
 ```bash
 defaults write -g NSWindowShouldDragOnGesture -bool true # to move windows with ctrl-cmd
-stow -t ~ -d stow macos-common
+stow --no-folding -t ~ -d stow macos-common
 ```
 
-Existing Macs after the Ghostty split: `stow -R -t ~ -d stow term-gui macos-common`
+`macos-common` also installs Pi's `mac-paste-image.ts`. If you already have a
+local copy, see [Pi migration](docs/pi.md#установка-и-обновление) before stowing.
+
+Existing Macs after the Ghostty split: `stow -R --no-folding -t ~ -d stow term-gui macos-common`
 (adds `~/.config/ghostty/macos.conf`; without it Ghostty loses the Mac bits).
 `start-colima` moved from `bin-common` to `macos-common` as `colima-start`:
 after pull remove the dangling link (`rm ~/bin/start-colima`) and re-stow.
@@ -261,7 +264,7 @@ stow -n -v -t ~ -d stow shell   # dry-run, shows what will be symlinked
 | `stow/linux-desktop/` | Linux-only desktop utilities, including `smart-mpv`; skip on SSH/headless hosts |
 | `stow/git/` | `.gitconfig`, global `git/ignore` |
 | `stow/bin/` | cross-platform scripts |
-| `stow/macos-common/` | Any Mac: macfeh, pgcli, neovide, mac-only bin scripts |
+| `stow/macos-common/` | Any Mac: macfeh, pgcli, neovide, mac-only bin scripts and Pi clipboard extension |
 | `stow/macos-personal/` | Personal Mac: SA-enabled `.yabairc`, yc, gemini, ass aliases |
 | `stow/macos-work/` | Work Mac: no-SA `.yabairc` (SIP-safe variant) |
 | `stow/macos-yabai-scripts/` | Yabai helper scripts → `~/.config/yabai/`. Stow on any yabai mac (personal + work) |
