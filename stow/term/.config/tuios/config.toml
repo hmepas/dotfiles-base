@@ -129,6 +129,7 @@ glyphs = "default"
 border_style = "rounded"
 frame_panels = false
 zen_mode = "disabled"
+host_title = "{title} · {session}"
 
 [keybindings]
 leader_key = "ctrl+a"
