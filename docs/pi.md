@@ -64,6 +64,19 @@ Vault должен быть доступен как `~/zk` на каждой м�
 После `git pull` повторять stow при добавлении файлов, `npm ci` при изменении
 lockfile и `poetry install` при изменении Python-зависимостей.
 
+## Если `subagents` не находит `effect` после Stow
+
+Stow создаёт ссылки, но не ставит npm-зависимости. Выполни из корня
+`dotfiles-base`, а не из `~/.pi/agent/extensions`:
+
+```bash
+npm --prefix stow/pi/.pi/agent/extensions/subagents ci --omit=dev --ignore-scripts
+```
+
+`effect` появится в `stow/pi/.pi/agent/extensions/subagents/node_modules`.
+Флаг `--ignore-scripts` пропускает `prepare`, которому нужны dev-зависимости.
+После успешной установки выполни `/reload` в Pi.
+
 ## Текущие настройки Mac
 
 Снимок при переносе, Pi `1.5.2`. Это документация, не автоматически
