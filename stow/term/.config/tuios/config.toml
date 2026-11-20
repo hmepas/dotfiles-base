@@ -130,6 +130,14 @@ border_style = "rounded"
 frame_panels = false
 zen_mode = "disabled"
 host_title = "{title} · {session}"
+dockbar_position = "top"
+show_clock = false
+show_cpu = true
+show_ram = true
+dock_prefix_indicator = "pill"
+dock_mode_pill = "input"
+dock_mode_split_letter = true
+dock_compact = true
 
 [keybindings]
 leader_key = "ctrl+a"
@@ -223,3 +231,25 @@ move_and_follow_9 = [] # Instead: Ctrl-A, Ctrl-T, w, (; then Ctrl-A, 9.
 
 [agents]
 enabled = true
+
+[appearance.sidebar.left]
+
+[appearance.sidebar]
+row_style = "marker"
+header_style = "icon"
+density = "normal"
+show_glyphs = true
+show_numbers = false
+file_icons = true
+folder_click = "navigate"
+files_style = "list"
+file_actions = true
+marquee = true
+peek = true
+header_case = "lowercase"
+sections = "sessions:25,files:25,agents:34"
+width = 26
+per_session = false
+
+[dock]
+meter_interval_ms = 2000
