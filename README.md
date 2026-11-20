@@ -31,6 +31,9 @@ brew bundle --file=packages/Brewfile
 # 4. Base symlinking
 stow -t ~ -d stow shell term git bin-common
 
+# `bin-common` also installs `~/bin/btw` (requires Node.js and Pi).
+# It is safe to leave stowed on SSH hosts where it is not used.
+
 # 5. Shared agent skills (Claude, Codex, Pi)
 ./scripts/setup-agent-skills.sh
 
@@ -64,6 +67,16 @@ Pi gets `ask-user`, `background-terminals`, `file-search`, `subagents`, and the
 Existing installations: compare and back up conflicting files before stowing.
 See [Pi setup and current settings](docs/pi.md) for migration and the remaining
 Mac/Linux differences.
+
+### Pi: Keenable extension (optional)
+
+Included in the `pi` package stowed above; install its dependencies:
+
+```bash
+npm ci --prefix ~/.pi/agent/extensions/keenable
+```
+
+Run `/reload` in Pi. See the [extension README](stow/pi/.pi/agent/extensions/keenable/README.md) for credentials and the `web-tools` prerequisite for fetch.
 
 ### Any GUI host (Mac or Linux desktop)
 
@@ -258,7 +271,7 @@ stow -n -v -t ~ -d stow shell   # dry-run, shows what will be symlinked
 | `packages/Brewfile.work` | Work Mac |
 | `packages/arch/` | Arch Linux — pacman + paru |
 | `stow/claude/` | Shared Claude instructions, any agent host |
-| `stow/pi/` | Shared Pi extensions and `/coding` prompt, same hosts as Claude |
+| `stow/pi/` | Shared Pi extensions (incl. optional Keenable search/fetch) and `/coding` prompt, same hosts as Claude |
 | `stow/agent-skills/` | Personal zk and xlsx skills shared by agents |
 | `docs/pi.md` | Pi setup, Mac settings snapshot, remaining Linux convergence |
 | `stow/shell/` | `.zshrc`, `.profile`, common zsh modules |
@@ -266,7 +279,7 @@ stow -n -v -t ~ -d stow shell   # dry-run, shows what will be symlinked
 | `stow/term-gui/` | Cross-platform GUI terminals (WezTerm, Ghostty) — any Mac or Linux desktop |
 | `stow/linux-desktop/` | Linux-only desktop utilities, including `smart-mpv`; skip on SSH/headless hosts |
 | `stow/git/` | `.gitconfig`, global `git/ignore` |
-| `stow/bin/` | cross-platform scripts |
+| `stow/bin-common/` | Cross-platform scripts, including the Pi-powered `btw` helper |
 | `stow/macos-common/` | Any Mac: macfeh, pgcli, neovide, mac-only bin scripts and Pi clipboard extension |
 | `stow/macos-personal/` | Personal Mac: SA-enabled `.yabairc`, yc, gemini, ass aliases |
 | `stow/macos-work/` | Work Mac: no-SA `.yabairc` (SIP-safe variant) |
