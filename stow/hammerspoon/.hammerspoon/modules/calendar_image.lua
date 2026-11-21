@@ -23,12 +23,24 @@ local function fittedFrame(img, screen)
   return hs.geometry.rect(sf.x + (sf.w - w) / 2, sf.y + (sf.h - h) / 2, w, h)
 end
 
-local function newCanvas(level)
-  local img = imageOrAlert()
-  if not img then return end
-  local c = hs.canvas.new(fittedFrame(img, hs.screen.mainScreen()))
-  c[1] = { type = "image", image = img, imageScaling = "scaleProportionally" }
-  c:level(level)
+-- Canvases are created once and reused (show/hide). A deleted canvas
+-- keeps its native backing (MBs for this image) until Lua GC runs, and
+-- GC can't see that size, so one canvas per keypress grew Hammerspoon
+-- to 17 GB over a week (2026-11).
+local canvases = {}
+local img
+
+local function getCanvas(level)
+  local c = canvases[level]
+  if not c then
+    img = img or imageOrAlert()
+    if not img then return end
+    c = hs.canvas.new({ x = 0, y = 0, w = 1, h = 1 })
+    c[1] = { type = "image", image = img, imageScaling = "scaleProportionally" }
+    c:level(level)
+    canvases[level] = c
+  end
+  c:frame(fittedFrame(img, hs.screen.mainScreen()))
   return c
 end
 
@@ -37,12 +49,11 @@ end
 local overlay
 
 local function hideOverlay()
-  if overlay then overlay:delete(); overlay = nil end
+  if overlay then overlay:hide(); overlay = nil end
 end
 
 local function showOverlay()
-  hideOverlay()
-  overlay = newCanvas(hs.canvas.windowLevels.overlay)
+  overlay = getCanvas(hs.canvas.windowLevels.overlay)
   if overlay then overlay:show() end
 end
 
@@ -56,7 +67,7 @@ end
 
 local function closePersistent()
   stopDrag()
-  if persistent then persistent:delete(); persistent = nil end
+  if persistent then persistent:hide(); persistent = nil end
   if escHotkey then escHotkey:delete(); escHotkey = nil end
 end
 
@@ -82,7 +93,7 @@ end
 
 function M.togglePersistent()
   if persistent then closePersistent(); return end
-  persistent = newCanvas(hs.canvas.windowLevels.floating)
+  persistent = getCanvas(hs.canvas.windowLevels.floating)
   if not persistent then return end
   makeDraggable(persistent)
   persistent:show()
