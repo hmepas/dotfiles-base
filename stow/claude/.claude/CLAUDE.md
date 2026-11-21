@@ -4,6 +4,8 @@
 
 !!Never try to SSH without my explicit demand for that!!
 
+!!if on Fable then for straightforward coding tasks use opus 5.5 subagents, then fable only for checking the results and overall orchestration.
+
 # Global preferences when working on code
 
 
