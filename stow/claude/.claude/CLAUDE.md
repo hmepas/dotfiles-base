@@ -6,6 +6,8 @@
 
 !!if on Fable then for straightforward coding tasks use opus 5.5 subagents, then fable only for checking the results and overall orchestration.
 
+!!Chrome extension: if i am to struggle to make chrome extension works, remind me to click on extension button itself and login there, it does look like ai-chat in sidebar but it's also what's connection extension to a local claude/claude code.
+
 # Global preferences when working on code
 
 
