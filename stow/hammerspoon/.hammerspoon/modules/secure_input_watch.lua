@@ -22,6 +22,7 @@ local ALERT_RAISE_HEIGHTS = 2 -- lift off the edge, in alert heights
 local onTicks = 0
 local hint = nil
 local alertId = nil
+local alertDrawings = nil
 
 -- hs.alert has no edge offset, so nudge its drawings (private field) after show.
 local function showRaised(text, duration)
@@ -31,7 +32,17 @@ local function showRaised(text, duration)
     local f = d:frame()
     d:setTopLeft({ x = f.x, y = f.y - ALERT_RAISE_HEIGHTS * alert.frame.h })
   end
-  return id
+  return id, { table.unpack(alert.drawings) }
+end
+
+-- hs.alert only hides its drawings and leaves the windows to Lua GC, which
+-- never catches up when re-alerting every tick (18k leaked windows, 2026-11).
+-- Delete them explicitly.
+local function closeAlert()
+  if not alertId then return end
+  hs.alert.closeSpecific(alertId, 0)
+  for _, d in ipairs(alertDrawings) do d:delete() end
+  alertId, alertDrawings = nil, nil
 end
 
 local function culpritHint()
@@ -55,19 +66,19 @@ local function tick()
       print("secure_input_watch: ON, hint " .. hint)
     end
     if onTicks >= GRACE_TICKS then
-      if alertId then hs.alert.closeSpecific(alertId) end
-      alertId = showRaised(
+      closeAlert()
+      alertId, alertDrawings = showRaised(
         string.format("⚠️ Secure Input ON %ds — hotkeys blocked\nfrontmost when enabled: %s",
           onTicks * INTERVAL, hint),
         ALERT_DURATION)
     end
   elseif onTicks > 0 then
     if onTicks >= GRACE_TICKS then
-      if alertId then hs.alert.closeSpecific(alertId) end
+      closeAlert()
       showRaised("Secure Input released", 2)
     end
     print("secure_input_watch: OFF after " .. onTicks * INTERVAL .. "s")
-    onTicks, hint, alertId = 0, nil, nil
+    onTicks, hint = 0, nil
   end
 end
 
