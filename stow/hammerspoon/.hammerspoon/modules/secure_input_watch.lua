@@ -7,6 +7,9 @@
 -- release it (Bitwarden unlock screen at login, 2026-08) leaves HS dead
 -- with no visible reason. Poll and shout while it stays on.
 --
+-- The lock screen holds Secure Input legitimately for as long as it is
+-- up, so a locked session is treated as "off".
+--
 -- Culprit hint comes from IOConsoleUsers/kCGSSessionSecureInputPID —
 -- that is the *frontmost* app at the moment the flag flipped on, not
 -- necessarily the enabler (background enablers get misattributed).
@@ -15,14 +18,12 @@ local M = {}
 
 local INTERVAL = 5           -- seconds between checks
 local GRACE_TICKS = 2        -- ignore short legit password entry
-local ALERT_DURATION = INTERVAL - 0.5
 local ALERT_STYLE = { atScreenEdge = 2 } -- bottom edge: center covers password dialogs
 local ALERT_RAISE_HEIGHTS = 2 -- lift off the edge, in alert heights
 
 local onTicks = 0
 local hint = nil
 local alertId = nil
-local alertDrawings = nil
 
 -- hs.alert has no edge offset, so nudge its drawings (private field) after show.
 local function showRaised(text, duration)
@@ -32,17 +33,17 @@ local function showRaised(text, duration)
     local f = d:frame()
     d:setTopLeft({ x = f.x, y = f.y - ALERT_RAISE_HEIGHTS * alert.frame.h })
   end
-  return id, { table.unpack(alert.drawings) }
+  return id
 end
 
--- hs.alert only hides its drawings and leaves the windows to Lua GC, which
--- never catches up when re-alerting every tick (18k leaked windows, 2026-11).
--- Delete them explicitly.
+-- An alert's windows are only closed by Lua GC (even an explicit delete()
+-- waits for it), and the tiny Lua heap almost never triggers one: re-alerting
+-- every tick leaked 18k windows (2026-11). So one alert per incident, and
+-- collect right after closing it.
 local function closeAlert()
-  if not alertId then return end
   hs.alert.closeSpecific(alertId, 0)
-  for _, d in ipairs(alertDrawings) do d:delete() end
-  alertId, alertDrawings = nil, nil
+  alertId = nil
+  collectgarbage()
 end
 
 local function culpritHint()
@@ -59,18 +60,17 @@ local function culpritHint()
 end
 
 local function tick()
-  if hs.eventtap.isSecureInputEnabled() then
+  local locked = hs.caffeinate.sessionProperties().CGSSessionScreenIsLocked
+  if hs.eventtap.isSecureInputEnabled() and not locked then
     onTicks = onTicks + 1
     if onTicks == 1 then
       hint = culpritHint()
       print("secure_input_watch: ON, hint " .. hint)
     end
-    if onTicks >= GRACE_TICKS then
-      closeAlert()
-      alertId, alertDrawings = showRaised(
-        string.format("⚠️ Secure Input ON %ds — hotkeys blocked\nfrontmost when enabled: %s",
-          onTicks * INTERVAL, hint),
-        ALERT_DURATION)
+    if onTicks == GRACE_TICKS then
+      alertId = showRaised(
+        "⚠️ Secure Input ON — hotkeys blocked\nfrontmost when enabled: " .. hint,
+        "indefinite")
     end
   elseif onTicks > 0 then
     if onTicks >= GRACE_TICKS then
@@ -82,6 +82,7 @@ local function tick()
   end
 end
 
-M.timer = hs.timer.doEvery(INTERVAL, tick)
+-- continueOnError: by default one callback error stops the timer for good.
+M.timer = hs.timer.doEvery(INTERVAL, tick, true)
 
 return M
