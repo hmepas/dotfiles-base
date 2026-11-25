@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 
-import { constants as osConstants } from "node:os";
+import { constants as osConstants, homedir, tmpdir } from "node:os";
 import { mkdtemp, rm } from "node:fs/promises";
-import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { spawn } from "node:child_process";
 import { createInterface } from "node:readline/promises";
@@ -131,6 +130,8 @@ async function main() {
         process.env.BTW_THINKING || "off",
         "--no-tools",
         "--no-extensions",
+        "--extension",
+        join(homedir(), ".pi", "agent", "extensions", "openai-fast.ts"),
         "--no-mcp",
         "--no-skills",
         "--no-prompt-templates",
