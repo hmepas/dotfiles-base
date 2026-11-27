@@ -65,10 +65,36 @@ if cfg.IS_YABAI then
   -- yabai-only launchers (open + focus space)
   -- ============================================================
 
-  -- alt - g: Telegram + focus sG
+  -- alt - g: Telegram + focus sG.
+  -- Telegram's main window sometimes drifts off sG (shown again without a
+  -- window_created event, so the space rule never fires). Pull the main
+  -- window and the invisible "Media viewer" back to sG, then focus.
+  -- Main window = lowest-id standard window (created first); separate chat
+  -- windows opened later get higher ids and stay where they are.
   kbd.bind(alt, "g", "Telegram → space sG", function()
-    hs.application.launchOrFocus("Telegram")
-    yab.cmd({ "space", "--focus", "sG" })
+    hs.task.new(cfg.YABAI_BIN, function(code, out)
+      local wins = code == 0 and hs.json.decode(out) or {}
+      local main, steps = nil, {}
+      for _, w in ipairs(wins) do
+        if w.app == "Telegram" then
+          if w.title == "Media viewer" then
+            table.insert(steps, { "window", tostring(w.id), "--space", "sG" })
+          elseif w.subrole == "AXStandardWindow" and (not main or w.id < main.id) then
+            main = w
+          end
+        end
+      end
+      if not main then
+        hs.application.launchOrFocus("Telegram")
+        yab.cmd({ "space", "--focus", "sG" })
+        return
+      end
+      local id = tostring(main.id)
+      table.insert(steps, { "window", id, "--space", "sG" })
+      table.insert(steps, { "space", "--focus", "sG" })
+      table.insert(steps, { "window", "--focus", id })
+      yab.seq(table.unpack(steps))
+    end, { "-m", "query", "--windows" }):start()
   end)
 
   -- alt - f: Finder toggle helper

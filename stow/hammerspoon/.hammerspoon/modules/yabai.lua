@@ -41,6 +41,20 @@ function M.tryCmd(...)
   tryNext(1)
 end
 
+-- Run yabai commands strictly in order, regardless of exit codes.
+-- For dependent steps (move window, then focus space, then focus window).
+function M.seq(...)
+  if not cfg.IS_YABAI then return end
+  local chains = { ... }
+  local function runNext(i)
+    if i > #chains then return end
+    local args = { "-m" }
+    for _, a in ipairs(chains[i]) do table.insert(args, a) end
+    hs.task.new(cfg.YABAI_BIN, function() runNext(i + 1) end, args):start()
+  end
+  runNext(1)
+end
+
 -- Run helper script (e.g. cycle-space-windows.sh). Inject PATH so the
 -- script can call `yabai` plainly.
 function M.helper(script, ...)

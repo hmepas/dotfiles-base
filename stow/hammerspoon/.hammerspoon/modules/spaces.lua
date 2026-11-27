@@ -66,4 +66,9 @@ if cfg.IS_YABAI then
       yab.cmd({ "window", "--space", label })
     end)
   end
+
+  -- alt + shift - o: send window back to s16 (Bitwarden/Obsidian home)
+  kbd.bind(alt_shift, "o", "Move window to space s16", function()
+    yab.cmd({ "window", "--space", "s16" })
+  end)
 end
