@@ -6,8 +6,10 @@ set -euo pipefail
 [ $# -ge 1 ] || { echo "usage: $0 next|prev"; exit 2; }
 dir="$1"
 
-# Список окон текущего спейса, как есть (без сортировки), исключаем минимизированные
-mapfile -t WIDS < <(yabai -m query --windows --space | jq -r '.[]  | select (.app != "Wispr Flow") | .id')
+# Окна текущего спейса, отсортированные по id: yabai отдает их в z-order,
+# который меняется после каждого фокуса, и цикл скачет. Невидимые окна
+# (Telegram "Media viewer" и т.п.) исключаем — фокус на них "в никуда".
+mapfile -t WIDS < <(yabai -m query --windows --space | jq -r 'map(select(.app != "Wispr Flow" and ."is-visible")) | sort_by(.id) | .[].id')
 N=${#WIDS[@]}
 [ "$N" -gt 0 ] || exit 0
 

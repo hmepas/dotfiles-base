@@ -119,8 +119,13 @@ if cfg.IS_YABAI then
 
   -- Stack navigation / cycle
   kbd.register(alt, "n / p", "Focus stack next / prev")
-  kbd.bind(alt, "n", function() yab.cmd({ "window", "--focus", "stack.next" }) end)
-  kbd.bind(alt, "p", function() yab.cmd({ "window", "--focus", "stack.prev" }) end)
+  -- wrap around: at the stack end, jump to the other end
+  kbd.bind(alt, "n", function()
+    yab.tryCmd({ "window", "--focus", "stack.next" }, { "window", "--focus", "stack.first" })
+  end)
+  kbd.bind(alt, "p", function()
+    yab.tryCmd({ "window", "--focus", "stack.prev" }, { "window", "--focus", "stack.last" })
+  end)
   kbd.register(alt_shift, "n / p", "Cycle space windows")
   kbd.bind(alt_shift, "n", function() yab.helper("cycle-space-windows.sh", "next") end)
   kbd.bind(alt_shift, "p", function() yab.helper("cycle-space-windows.sh", "prev") end)

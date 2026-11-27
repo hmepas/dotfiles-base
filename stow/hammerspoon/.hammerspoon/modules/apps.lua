@@ -68,18 +68,16 @@ if cfg.IS_YABAI then
   -- alt - g: Telegram + focus sG.
   -- Telegram's main window sometimes drifts off sG (shown again without a
   -- window_created event, so the space rule never fires). Pull the main
-  -- window and the invisible "Media viewer" back to sG, then focus.
+  -- window back to sG, then focus. The invisible "Media viewer" is ignored.
   -- Main window = lowest-id standard window (created first); separate chat
   -- windows opened later get higher ids and stay where they are.
   kbd.bind(alt, "g", "Telegram → space sG", function()
     hs.task.new(cfg.YABAI_BIN, function(code, out)
       local wins = code == 0 and hs.json.decode(out) or {}
-      local main, steps = nil, {}
+      local main
       for _, w in ipairs(wins) do
         if w.app == "Telegram" then
-          if w.title == "Media viewer" then
-            table.insert(steps, { "window", tostring(w.id), "--space", "sG" })
-          elseif w.subrole == "AXStandardWindow" and (not main or w.id < main.id) then
+          if w.subrole == "AXStandardWindow" and (not main or w.id < main.id) then
             main = w
           end
         end
@@ -90,10 +88,11 @@ if cfg.IS_YABAI then
         return
       end
       local id = tostring(main.id)
-      table.insert(steps, { "window", id, "--space", "sG" })
-      table.insert(steps, { "space", "--focus", "sG" })
-      table.insert(steps, { "window", "--focus", id })
-      yab.seq(table.unpack(steps))
+      yab.seq(
+        { "window", id, "--space", "sG" },
+        { "space", "--focus", "sG" },
+        { "window", "--focus", id }
+      )
     end, { "-m", "query", "--windows" }):start()
   end)
 
